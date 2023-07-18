@@ -28,11 +28,11 @@ http_interactions:
       Content-Type:
       - application/json
       Request-Id:
-      - 1cc6d5bd7fcadce7bba96746de63d5e0b1c0eaf78981f7aa1cf5403e66737bdd
+      - 9f570fcefaaa6c7260528c35d3a304f2d6e34167f147bed700c3e846f9e7315f
       X-Cloud-Trace-Context:
-      - 15c94e7a044fd28af262785dafed4021
+      - e71837f46ee9899edf50ccf30f56043d
       Date:
-      - Tue, 18 Jul 2023 12:57:23 GMT
+      - Tue, 18 Jul 2023 13:25:30 GMT
       Server:
       - Google Frontend
       Content-Length:
@@ -43,6 +43,6 @@ http_interactions:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
     body:
       encoding: UTF-8
-      string: '{"completion":" Here is a continuation of","stop_reason":"max_tokens","model":"claude-2.0","stop":null,"log_id":"1cc6d5bd7fcadce7bba96746de63d5e0b1c0eaf78981f7aa1cf5403e66737bdd"}'
-  recorded_at: Tue, 18 Jul 2023 12:57:23 GMT
+      string: '{"completion":" Here is a continuation of","stop_reason":"max_tokens","model":"claude-2.0","stop":null,"log_id":"9f570fcefaaa6c7260528c35d3a304f2d6e34167f147bed700c3e846f9e7315f"}'
+  recorded_at: Tue, 18 Jul 2023 13:25:31 GMT
 recorded_with: VCR 6.1.0
