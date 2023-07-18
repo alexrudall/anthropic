@@ -1,11 +1,11 @@
 RSpec.describe Anthropic::Client do
-  describe "#completions" do
+  describe "#complete" do
     context "with a prompt and max_tokens", :vcr do
       let(:prompt) { "Once upon a time" }
       let(:max_tokens) { 5 }
 
       let(:response) do
-        Anthropic::Client.new.completions(
+        Anthropic::Client.new.complete(
           parameters: {
             model: model,
             max_tokens_to_sample: max_tokens,
@@ -14,7 +14,7 @@ RSpec.describe Anthropic::Client do
         )
       end
       let(:text) { response.dig("choices", 0, "text") }
-      let(:cassette) { "#{model} completions #{prompt}".downcase }
+      let(:cassette) { "#{model} complete #{prompt}".downcase }
 
       context "with model: claude-2" do
         let(:model) { "claude-2" }

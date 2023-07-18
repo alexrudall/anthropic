@@ -33,7 +33,7 @@ RSpec.describe Anthropic do
       let(:access_token) { nil }
 
       it "raises an error" do
-        expect { Anthropic::Client.new.completions }.to raise_error(Anthropic::ConfigurationError)
+        expect { Anthropic::Client.new.complete }.to raise_error(Anthropic::ConfigurationError)
       end
     end
 

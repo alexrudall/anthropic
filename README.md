@@ -95,7 +95,7 @@ end
 Hit the Anthropic API for a completion:
 
 ```ruby
-response = client.completions(
+response = client.complete(
     parameters: {
         model: "claude-2",
         prompt: "Once upon a time",

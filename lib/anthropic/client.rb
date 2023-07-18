@@ -11,7 +11,7 @@ module Anthropic
       Anthropic.configuration.extra_headers = extra_headers
     end
 
-    def completions(parameters: {})
+    def complete(parameters: {})
       parameters[:prompt] = wrap_prompt(prompt: parameters[:prompt])
       Anthropic::Client.json_post(path: "/complete", parameters: parameters)
     end
