@@ -1,0 +1,48 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/complete
+    body:
+      encoding: UTF-8
+      string: '{"model":"claude-2","max_tokens_to_sample":5,"prompt":"\n\nHuman: How
+        high is the sky?\n\nAssistant:"}'
+    headers:
+      Content-Type:
+      - application/json
+      X-Api-Key:
+      - "<ANTHROPIC_API_KEY>"
+      Anthropic-Version:
+      - '2023-06-01'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Request-Id:
+      - b5a12f0ec9900c47ed5c9254d2794f72c14afa6c61571a11ce33f45034ae7bce
+      X-Cloud-Trace-Context:
+      - 10e11e101cb2e344ac40eb006d258e04
+      Date:
+      - Tue, 18 Jul 2023 13:42:05 GMT
+      Server:
+      - Google Frontend
+      Content-Length:
+      - '179'
+      Via:
+      - 1.1 google
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: UTF-8
+      string: '{"completion":" The sky has no definitive","stop_reason":"max_tokens","model":"claude-2.0","stop":null,"log_id":"b5a12f0ec9900c47ed5c9254d2794f72c14afa6c61571a11ce33f45034ae7bce"}'
+  recorded_at: Tue, 18 Jul 2023 13:42:05 GMT
+recorded_with: VCR 6.1.0

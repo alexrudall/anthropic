@@ -74,8 +74,8 @@ module Anthropic
     def headers
       {
         "Content-Type" => "application/json",
-        "Authorization" => "Bearer #{Anthropic.configuration.access_token}",
-        "Anthropic-Organization" => Anthropic.configuration.organization_id
+        "x-api-key" => Anthropic.configuration.access_token,
+        "Anthropic-Version" => Anthropic.configuration.anthropic_version
       }.merge(Anthropic.configuration.extra_headers)
     end
 
@@ -83,7 +83,7 @@ module Anthropic
       parameters&.transform_values do |value|
         next value unless value.is_a?(File)
 
-        # Doesn't seem like Anthropic need mime_type yet, so not worth
+        # Doesn't seem like Anthropic needs mime_type yet, so not worth
         # the library to figure this out. Hence the empty string
         # as the second argument.
         Faraday::UploadIO.new(value, "", value.path)

@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Alex"]
   spec.email         = ["alexrudall@users.noreply.github.com"]
 
-  spec.summary       = "Anthropic API + Ruby! 🤖❤️"
+  spec.summary       = "Anthropic API + Ruby! 🌌❤️"
   spec.homepage      = "https://github.com/alexrudall/anthropic"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.6.0")

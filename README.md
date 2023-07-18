@@ -4,9 +4,9 @@
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/alexrudall/anthropic/blob/main/LICENSE.txt)
 [![CircleCI Build Status](https://circleci.com/gh/alexrudall/anthropic.svg?style=shield)](https://circleci.com/gh/alexrudall/anthropic)
 
-Use the [Anthropic API](https://anthropic.com/blog/anthropic-api/) with Ruby! 🤖❤️
+Use the [Anthropic API](https://docs.anthropic.com/claude/reference/getting-started-with-the-api) with Ruby! 🌌❤️
 
-This is very much a WIP and probably doesn't work as I don't have access to the Anthropic API as yet, but it will get a lot better once I do! Hopefully very soon :D
+You can apply for access to the API [here](https://docs.anthropic.com/claude/docs/getting-access-to-claude).
 
 [Ruby AI Builders Discord](https://discord.gg/k4Uc224xVD)
 
@@ -40,8 +40,7 @@ require "anthropic"
 
 ## Usage
 
-- Get your API key from [https://platform.anthropic.com/account/api-keys](https://platform.anthropic.com/account/api-keys)
-- If you belong to multiple organizations, you can get your Organization ID from [https://platform.anthropic.com/account/org-settings](https://platform.anthropic.com/account/org-settings)
+- Get your API key from [https://console.anthropic.com/account/keys](https://console.anthropic.com/account/keys)
 
 ### Quickstart
 
@@ -67,26 +66,27 @@ Then you can create a client like this:
 client = Anthropic::Client.new
 ```
 
-#### Custom timeout or base URI
+#### Change version or timeout
+
+You can change to a different dated version (different from the URL version which is just `v1`) of Anthropic's API by passing `anthropic_version` when initializing the client. If you don't the default latest will be used, which is "2023-06-01". [More info](https://docs.anthropic.com/claude/reference/versioning)
 
 The default timeout for any request using this library is 120 seconds. You can change that by passing a number of seconds to the `request_timeout` when initializing the client.
 
 ```ruby
 client = Anthropic::Client.new(
     access_token: "access_token_goes_here",
-    request_timeout: 240
+    anthropic_version: "2023-01-01", # Optional
+    request_timeout: 240 # Optional
 )
 ```
 
-or when configuring the gem:
+You can also set these keys when configuring the gem:
 
 ```ruby
 Anthropic.configure do |config|
     config.access_token = ENV.fetch("ANTHROPIC_API_KEY")
+    config.anthropic_version = "2023-01-01" # Optional
     config.request_timeout = 240 # Optional
-    config.extra_headers = {
-        "X-Proxy-Refresh": "true"
-    } # Optional
 end
 ```
 
@@ -95,15 +95,29 @@ end
 Hit the Anthropic API for a completion:
 
 ```ruby
-response = client.completions(
+response = client.complete(
     parameters: {
         model: "claude-2",
-        prompt: "Once upon a time",
-        max_tokens: 5
+        prompt: "How high is the sky?",
+        max_tokens_to_sample: 5
     })
-puts response["choices"].map { |c| c["text"] }
-# => [", there lived a great"]
+puts response["completion"]
+# => " The sky has no definitive"
 ```
+
+Note that all requests are prepended by this library with
+
+`\n\nHuman: `
+
+and appended with
+
+`\n\nAssistant:`
+
+so whatever prompt you pass will be sent to the API as
+
+`\n\nHuman: How high is the sky?\n\nAssistant:`
+
+This is a requirement of [the API](https://docs.anthropic.com/claude/reference/complete_post).
 
 ## Development
 
