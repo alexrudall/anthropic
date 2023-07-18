@@ -4,7 +4,7 @@
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/alexrudall/anthropic/blob/main/LICENSE.txt)
 [![CircleCI Build Status](https://circleci.com/gh/alexrudall/anthropic.svg?style=shield)](https://circleci.com/gh/alexrudall/anthropic)
 
-Use the [Anthropic API](https://anthropic.com/blog/anthropic-api/) with Ruby! 🤖❤️
+Use the [Anthropic API](https://docs.anthropic.com/claude/reference/getting-started-with-the-api) with Ruby! 🌌❤️
 
 This is very much a WIP and probably doesn't work as I don't have access to the Anthropic API as yet, but it will get a lot better once I do! Hopefully very soon :D
 

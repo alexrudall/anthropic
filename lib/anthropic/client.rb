@@ -12,7 +12,16 @@ module Anthropic
     end
 
     def completions(parameters: {})
-      Anthropic::Client.json_post(path: "/completions", parameters: parameters)
+      parameters[:prompt] = wrap_prompt(prompt: parameters[:prompt])
+      Anthropic::Client.json_post(path: "/complete", parameters: parameters)
+    end
+
+    private
+
+    def wrap_prompt(prompt:, prefix: "\n\nHuman: ", suffix: "\n\nAssistant:")
+      prompt.prepend(prefix) unless prompt.start_with?("\n\nHuman: ")
+      prompt.concat(suffix) unless prompt.end_with?("\n\nAssistant:")
+      prompt
     end
   end
 end

@@ -1,0 +1,48 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/complete
+    body:
+      encoding: UTF-8
+      string: '{"model":"claude-2","max_tokens_to_sample":5,"prompt":"\n\nHuman: Once
+        upon a time\n\nAssistant:"}'
+    headers:
+      Content-Type:
+      - application/json
+      X-Api-Key:
+      - "<ANTHROPIC_API_KEY>"
+      Anthropic-Version:
+      - '2023-06-01'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json
+      Request-Id:
+      - 1cc6d5bd7fcadce7bba96746de63d5e0b1c0eaf78981f7aa1cf5403e66737bdd
+      X-Cloud-Trace-Context:
+      - 15c94e7a044fd28af262785dafed4021
+      Date:
+      - Tue, 18 Jul 2023 12:57:23 GMT
+      Server:
+      - Google Frontend
+      Content-Length:
+      - '179'
+      Via:
+      - 1.1 google
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+    body:
+      encoding: UTF-8
+      string: '{"completion":" Here is a continuation of","stop_reason":"max_tokens","model":"claude-2.0","stop":null,"log_id":"1cc6d5bd7fcadce7bba96746de63d5e0b1c0eaf78981f7aa1cf5403e66737bdd"}'
+  recorded_at: Tue, 18 Jul 2023 12:57:23 GMT
+recorded_with: VCR 6.1.0
