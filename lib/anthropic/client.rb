@@ -21,8 +21,8 @@ module Anthropic
     def wrap_prompt(prompt:, prefix: "\n\nHuman: ", suffix: "\n\nAssistant:")
       return if prompt.nil?
 
-      prompt.prepend(prefix) unless prompt.start_with?("\n\nHuman: ")
-      prompt.concat(suffix) unless prompt.end_with?("\n\nAssistant:")
+      prompt.prepend(prefix) unless prompt.start_with?(prefix)
+      prompt.concat(suffix) unless prompt.end_with?(suffix)
       prompt
     end
   end
