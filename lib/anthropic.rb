@@ -11,7 +11,8 @@ module Anthropic
 
   class Configuration
     attr_writer :access_token
-    attr_accessor :anthropic_version, :api_version, :extra_headers, :organization_id, :request_timeout, :uri_base
+    attr_accessor :anthropic_version, :api_version, :extra_headers, :organization_id,
+                  :request_timeout, :uri_base
 
     DEFAULT_API_VERSION = "v1".freeze
     DEFAULT_ANTHROPIC_VERSION = "2023-06-01".freeze
