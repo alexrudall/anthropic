@@ -1,7 +1,7 @@
 RSpec.describe Anthropic::Client do
   describe "#complete" do
     context "with a prompt and max_tokens", :vcr do
-      let(:prompt) { "Once upon a time" }
+      let(:prompt) { "How high is the sky?" }
       let(:max_tokens) { 5 }
 
       let(:response) do

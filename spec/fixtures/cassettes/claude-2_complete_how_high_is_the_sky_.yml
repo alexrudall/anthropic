@@ -5,8 +5,8 @@ http_interactions:
     uri: https://api.anthropic.com/v1/complete
     body:
       encoding: UTF-8
-      string: '{"model":"claude-2","max_tokens_to_sample":5,"prompt":"\n\nHuman: Once
-        upon a time\n\nAssistant:"}'
+      string: '{"model":"claude-2","max_tokens_to_sample":5,"prompt":"\n\nHuman: How
+        high is the sky?\n\nAssistant:"}'
     headers:
       Content-Type:
       - application/json
@@ -28,11 +28,11 @@ http_interactions:
       Content-Type:
       - application/json
       Request-Id:
-      - 9f570fcefaaa6c7260528c35d3a304f2d6e34167f147bed700c3e846f9e7315f
+      - b5a12f0ec9900c47ed5c9254d2794f72c14afa6c61571a11ce33f45034ae7bce
       X-Cloud-Trace-Context:
-      - e71837f46ee9899edf50ccf30f56043d
+      - 10e11e101cb2e344ac40eb006d258e04
       Date:
-      - Tue, 18 Jul 2023 13:25:30 GMT
+      - Tue, 18 Jul 2023 13:42:05 GMT
       Server:
       - Google Frontend
       Content-Length:
@@ -43,6 +43,6 @@ http_interactions:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
     body:
       encoding: UTF-8
-      string: '{"completion":" Here is a continuation of","stop_reason":"max_tokens","model":"claude-2.0","stop":null,"log_id":"9f570fcefaaa6c7260528c35d3a304f2d6e34167f147bed700c3e846f9e7315f"}'
-  recorded_at: Tue, 18 Jul 2023 13:25:31 GMT
+      string: '{"completion":" The sky has no definitive","stop_reason":"max_tokens","model":"claude-2.0","stop":null,"log_id":"b5a12f0ec9900c47ed5c9254d2794f72c14afa6c61571a11ce33f45034ae7bce"}'
+  recorded_at: Tue, 18 Jul 2023 13:42:05 GMT
 recorded_with: VCR 6.1.0

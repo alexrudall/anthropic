@@ -98,11 +98,11 @@ Hit the Anthropic API for a completion:
 response = client.complete(
     parameters: {
         model: "claude-2",
-        prompt: "Once upon a time",
-        max_tokens: 5
+        prompt: "How high is the sky?",
+        max_tokens_to_sample: 5
     })
-puts response["choices"].map { |c| c["text"] }
-# => [", there lived a great"]
+puts response["completion"]
+# => " The sky has no definitive"
 ```
 
 Note that all requests are prepended by this library with
@@ -115,7 +115,7 @@ and appended with
 
 so whatever prompt you pass will be sent to the API as
 
-`\n\nHuman: Once upon a time\n\nAssistant:`
+`\n\nHuman: How high is the sky?\n\nAssistant:`
 
 This is a requirement of [the API](https://docs.anthropic.com/claude/reference/complete_post).
 
