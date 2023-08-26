@@ -8,11 +8,9 @@ Use the [Anthropic API](https://docs.anthropic.com/claude/reference/getting-star
 
 You can apply for access to the API [here](https://docs.anthropic.com/claude/docs/getting-access-to-claude).
 
-[Ruby AI Builders Discord](https://discord.gg/k4Uc224xVD)
+🚢 Need someone to ship critical Rails features for you, fast? I'm taking on a few new clients at an experimental crazy low price, check it out: [railsai.com](https://railsai.com?utm_source=ruby-openai&utm_medium=readme&utm_id=26072023)
 
-[Rails AI Guides](https://railsai.com)
-
-Follow me on [Twitter](https://twitter.com/alexrudall) for more Ruby / AI content!
+[🎮 Ruby AI Builders Discord](https://discord.gg/k4Uc224xVD) | [🐦 Twitter](https://twitter.com/alexrudall) | [🤖 OpenAI Gem](https://github.com/alexrudall/ruby-openai) | [🚂 Midjourney Gem](https://github.com/alexrudall/midjourney)
 
 ### Bundler
 
