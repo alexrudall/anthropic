@@ -18,12 +18,12 @@ module Anthropic
 
     private
 
-    def wrap_prompt(prompt:, prefix: "\n\nHuman: ", suffix: "\n\nAssistant:")
+    def wrap_prompt(prompt:, system_prompt: "", prefix: "\n\nHuman: ", suffix: "\n\nAssistant:")
       return if prompt.nil?
 
-      prompt.prepend(prefix) unless prompt.start_with?(prefix)
-      prompt.concat(suffix) unless prompt.end_with?(suffix)
-      prompt
+      wrapped_prompt = system_prompt
+      wrapped_prompt << (prefix + prompt + suffix)
+      wrapped_prompt
     end
   end
 end
