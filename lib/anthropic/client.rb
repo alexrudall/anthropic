@@ -16,6 +16,39 @@ module Anthropic
       Anthropic::Client.json_post(path: "/complete", parameters: parameters)
     end
 
+    def messages(model:, messages:, system: nil, parameters: {}) # rubocop:disable Metrics/MethodLength
+      parameters.merge!(system: system) if system
+      parameters.merge!(model: model, messages: messages)
+
+      max_attempts = 5
+      attempts = 0
+
+      # TODO: does this level of retry implementation belong here?
+      loop do
+        attempts += 1
+        Anthropic::Client.json_post(path: "/messages", parameters: parameters).tap do |response|
+          # handle successful response
+          return response if response.dig("content", 0, "text").present?
+
+          # handle max attempts
+          if attempts > max_attempts
+            raise Anthropic::Error,
+                  "Failed after #{max_attempts} attempts. #{error_message}"
+          end
+
+          # handle error response
+          error_type = response.dig("error", "type")
+          error_message = response.dig("error", "message")
+          if %w[overloaded_error api_error rate_limit_error].include?(error_type) # rubocop:disable Style/GuardClause
+            # retry loop with exponential backoff
+            sleep(1 * attempts)
+          else
+            raise Anthropic::Error, error_message
+          end
+        end
+      end
+    end
+
     private
 
     def wrap_prompt(prompt:, prefix: "\n\nHuman: ", suffix: "\n\nAssistant:")
