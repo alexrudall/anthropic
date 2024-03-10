@@ -16,9 +16,7 @@ module Anthropic
       Anthropic::Client.json_post(path: "/complete", parameters: parameters)
     end
         
-    def messages(model:, messages:, system: nil, parameters: {}) # rubocop:disable Metrics/MethodLength
-      parameters.merge!(system: system) if system
-      parameters.merge!(model: model, messages: messages)
+    def messages(parameters: {}) # rubocop:disable Metrics/MethodLength
       Anthropic::Client.json_post(path: "/messages", parameters: parameters)
     end
 

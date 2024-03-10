@@ -6,14 +6,14 @@ RSpec.describe Anthropic::Client do
 
       let(:response) do
         Anthropic::Client.new(access_token: ENV['ANTHROPIC_API_KEY']).messages(
-          model: model,
-          messages: [
-            {
-              role: "user",
-              content: "How High is the Sky?"
-            }
-          ],
           parameters: {
+            model: model,
+            messages: [
+              {
+                role: "user",
+                content: "How High is the Sky?"
+              }
+            ],
             max_tokens: max_tokens,
           }
         )
