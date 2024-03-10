@@ -1,0 +1,65 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      encoding: UTF-8
+      string: '{"max_tokens":5,"model":"claude-2.1","messages":[{"role":"user","content":"How
+        High is the Sky?"}]}'
+    headers:
+      Content-Type:
+      - application/json
+      X-Api-Key:
+      - "<ANTHROPIC_API_KEY>"
+      Anthropic-Version:
+      - '2023-06-01'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sun, 10 Mar 2024 07:48:04 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Anthropic-Ratelimit-Requests-Limit:
+      - '5'
+      Anthropic-Ratelimit-Requests-Remaining:
+      - '4'
+      Anthropic-Ratelimit-Requests-Reset:
+      - '2024-03-10T07:49:00Z'
+      Anthropic-Ratelimit-Tokens-Limit:
+      - '25000'
+      Anthropic-Ratelimit-Tokens-Remaining:
+      - '25000'
+      Anthropic-Ratelimit-Tokens-Reset:
+      - '2024-03-10T07:49:00Z'
+      Request-Id:
+      - req_01JEZGZ48oJu1J9jWiiwi1p8
+      X-Cloud-Trace-Context:
+      - 325b20d2b1b2ecb600f1a72cdf02ede5
+      Via:
+      - 1.1 google
+      Cf-Cache-Status:
+      - DYNAMIC
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 8621b33dfdd5f2b2-BOM
+    body:
+      encoding: ASCII-8BIT
+      string: '{"id":"msg_01FXDmQFKWtuU462tWUdfrvE","type":"message","role":"assistant","content":[{"type":"text","text":"The
+        sky doesn''t have"}],"model":"claude-2.1","stop_reason":"max_tokens","stop_sequence":null,"usage":{"input_tokens":15,"output_tokens":5}}'
+  recorded_at: Sun, 10 Mar 2024 07:48:04 GMT
+recorded_with: VCR 6.1.0
