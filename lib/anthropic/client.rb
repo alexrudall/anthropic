@@ -15,6 +15,10 @@ module Anthropic
       parameters[:prompt] = wrap_prompt(prompt: parameters[:prompt])
       Anthropic::Client.json_post(path: "/complete", parameters: parameters)
     end
+        
+    def messages(parameters: {}) # rubocop:disable Metrics/MethodLength
+      Anthropic::Client.json_post(path: "/messages", parameters: parameters)
+    end
 
     private
 
