@@ -1,5 +1,5 @@
 RSpec.describe Anthropic::Client do
-  describe "#complete" do
+  describe "#messages" do
     context "with a prompt and max_tokens", :vcr do
       let(:prompt) { "How high is the sky?" }
       let(:max_tokens) { 5 }
