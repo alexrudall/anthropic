@@ -88,7 +88,44 @@ Anthropic.configure do |config|
 end
 ```
 
-### Completions
+### Messages
+
+```
+POST https://api.anthropic.com/v1/messages
+```
+
+Hit the Anthropic API for a messages:
+
+```ruby
+response = client.messages(
+  parameters: {
+    model: 'claude-3-haiku-20240307',
+    system: "Respond only in Spanish.",
+    messages: [
+      {"role": "user", "content": "Hello, Claude!"}
+    ],
+    max_tokens: 1000
+  }
+)
+# => {"id"=>"msg_0123MiRVCgSG2PaQZwCGbgmV",
+# =>  "type"=>"message",
+# =>  "role"=>"assistant",
+# =>  "content"=>[{"type"=>"text", "text"=>"¡Hola! Es un gusto saludarte. ¿En qué puedo ayudarte hoy?"}],
+# =>  "model"=>"claude-3-haiku-20240307",
+# =>  "stop_reason"=>"end_turn",
+# =>  "stop_sequence"=>nil,
+# =>  "usage"=>{"input_tokens"=>17, "output_tokens"=>32}}
+```
+
+### Text Completions [Legacy]
+
+```
+POST https://api.anthropic.com/v1/complete
+```
+
+> [!WARNING]
+> The Text Completions API is a legacy API.
+> Anthropic [recommends](https://docs.anthropic.com/claude/reference/complete_post) using the [Messages API](#messages) going forward.
 
 Hit the Anthropic API for a completion:
 
