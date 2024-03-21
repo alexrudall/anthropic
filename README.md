@@ -50,11 +50,15 @@ client = Anthropic::Client.new(access_token: "access_token_goes_here")
 
 ### With Config
 
-For a more robust setup, you can configure the gem with your API keys, for example in an `anthropic.rb` initializer file. Never hardcode secrets into your codebase - instead use something like [dotenv](https://github.com/motdotla/dotenv) to pass the keys safely into your environments.
+For a more robust setup, you can configure the gem with your API keys, for example in an `anthropic.rb` initializer file. Never hardcode secrets into your codebase - instead use something like [dotenv](https://github.com/motdotla/dotenv) to pass the keys safely into your environments or rails credentials if you are using this in a rails project.
 
 ```ruby
 Anthropic.configure do |config|
-    config.access_token = ENV.fetch("ANTHROPIC_API_KEY")
+  # With dotenv
+  config.access_token = ENV.fetch("ANTHROPIC_API_KEY")
+  # OR
+  # With Rails credentials
+  config.access_token = Rails.application.credentials.dig(:anthropic, :api_key)
 end
 ```
 
@@ -72,9 +76,9 @@ The default timeout for any request using this library is 120 seconds. You can c
 
 ```ruby
 client = Anthropic::Client.new(
-    access_token: "access_token_goes_here",
-    anthropic_version: "2023-01-01", # Optional
-    request_timeout: 240 # Optional
+  access_token: "access_token_goes_here",
+  anthropic_version: "2023-01-01", # Optional
+  request_timeout: 240 # Optional
 )
 ```
 
@@ -82,11 +86,23 @@ You can also set these keys when configuring the gem:
 
 ```ruby
 Anthropic.configure do |config|
-    config.access_token = ENV.fetch("ANTHROPIC_API_KEY")
-    config.anthropic_version = "2023-01-01" # Optional
-    config.request_timeout = 240 # Optional
+  config.access_token = ENV.fetch("ANTHROPIC_API_KEY")
+  config.anthropic_version = "2023-01-01" # Optional
+  config.request_timeout = 240 # Optional
 end
 ```
+
+### Models
+
+As of March 2024, the following models are available:
+
+Model           | Latest API model name
+--------------- | ------------------------
+Claude 3 Opus   | claude-3-opus-20240229
+Claude 3 Sonnet | claude-3-sonnet-20240229
+Claude 3 Haiku  | claude-3-haiku-20240307
+
+You can find the latest model names in the [Anthropic API documentation](https://docs.anthropic.com/claude/docs/models-overview#model-recommendations).
 
 ### Messages
 
@@ -99,7 +115,7 @@ Hit the Anthropic API for a messages:
 ```ruby
 response = client.messages(
   parameters: {
-    model: 'claude-3-haiku-20240307',
+    model: 'claude-3-haiku-20240307', # claude-3-opus-20240229, claude-3-sonnet-20240229
     system: "Respond only in Spanish.",
     messages: [
       {"role": "user", "content": "Hello, Claude!"}
@@ -131,11 +147,11 @@ Hit the Anthropic API for a completion:
 
 ```ruby
 response = client.complete(
-    parameters: {
-        model: "claude-2",
-        prompt: "How high is the sky?",
-        max_tokens_to_sample: 5
-    })
+  parameters: {
+    model: "claude-2",
+    prompt: "How high is the sky?",
+    max_tokens_to_sample: 5
+  })
 puts response["completion"]
 # => " The sky has no definitive"
 ```
