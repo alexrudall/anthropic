@@ -5,7 +5,7 @@ RSpec.describe Anthropic::Client do
       let(:max_tokens) { 5 }
 
       let(:response) do
-        Anthropic::Client.new(access_token: ENV['ANTHROPIC_API_KEY']).messages(
+        Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)).messages(
           parameters: {
             model: model,
             messages: [
@@ -14,7 +14,7 @@ RSpec.describe Anthropic::Client do
                 content: "How High is the Sky?"
               }
             ],
-            max_tokens: max_tokens,
+            max_tokens: max_tokens
           }
         )
       end
