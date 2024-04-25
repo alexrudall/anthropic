@@ -96,11 +96,11 @@ end
 
 As of March 2024, the following models are available:
 
-Model           | Latest API model name
---------------- | ------------------------
-Claude 3 Opus   | claude-3-opus-20240229
-Claude 3 Sonnet | claude-3-sonnet-20240229
-Claude 3 Haiku  | claude-3-haiku-20240307
+| Model           | Latest API model name    |
+| --------------- | ------------------------ |
+| Claude 3 Opus   | claude-3-opus-20240229   |
+| Claude 3 Sonnet | claude-3-sonnet-20240229 |
+| Claude 3 Haiku  | claude-3-haiku-20240307  |
 
 You can find the latest model names in the [Anthropic API documentation](https://docs.anthropic.com/claude/docs/models-overview#model-recommendations).
 
@@ -110,12 +110,12 @@ You can find the latest model names in the [Anthropic API documentation](https:/
 POST https://api.anthropic.com/v1/messages
 ```
 
-Hit the Anthropic API for a messages:
+Send a sequence of messages (user or assistant) to the API and receive a message in response.
 
 ```ruby
 response = client.messages(
   parameters: {
-    model: 'claude-3-haiku-20240307', # claude-3-opus-20240229, claude-3-sonnet-20240229
+    model: "claude-3-haiku-20240307", # claude-3-opus-20240229, claude-3-sonnet-20240229
     system: "Respond only in Spanish.",
     messages: [
       {"role": "user", "content": "Hello, Claude!"}
@@ -123,52 +123,17 @@ response = client.messages(
     max_tokens: 1000
   }
 )
-# => {"id"=>"msg_0123MiRVCgSG2PaQZwCGbgmV",
-# =>  "type"=>"message",
-# =>  "role"=>"assistant",
-# =>  "content"=>[{"type"=>"text", "text"=>"¡Hola! Es un gusto saludarte. ¿En qué puedo ayudarte hoy?"}],
-# =>  "model"=>"claude-3-haiku-20240307",
-# =>  "stop_reason"=>"end_turn",
-# =>  "stop_sequence"=>nil,
-# =>  "usage"=>{"input_tokens"=>17, "output_tokens"=>32}}
+# => {
+# =>   "id" => "msg_0123MiRVCgSG2PaQZwCGbgmV",
+# =>   "type" => "message",
+# =>   "role" => "assistant",
+# =>   "content" => [{"type"=>"text", "text"=>"¡Hola! Es un gusto saludarte. ¿En qué puedo ayudarte hoy?"}],
+# =>   "model" => "claude-3-haiku-20240307",
+# =>   "stop_reason" => "end_turn",
+# =>   "stop_sequence" => nil,
+# =>   "usage" => {"input_tokens"=>17, "output_tokens"=>32}
+# => }
 ```
-
-### Text Completions [Legacy]
-
-```
-POST https://api.anthropic.com/v1/complete
-```
-
-> [!WARNING]
-> The Text Completions API is a legacy API.
-> Anthropic [recommends](https://docs.anthropic.com/claude/reference/complete_post) using the [Messages API](#messages) going forward.
-
-Hit the Anthropic API for a completion:
-
-```ruby
-response = client.complete(
-  parameters: {
-    model: "claude-2",
-    prompt: "How high is the sky?",
-    max_tokens_to_sample: 5
-  })
-puts response["completion"]
-# => " The sky has no definitive"
-```
-
-Note that all requests are prepended by this library with
-
-`\n\nHuman: `
-
-and appended with
-
-`\n\nAssistant:`
-
-so whatever prompt you pass will be sent to the API as
-
-`\n\nHuman: How high is the sky?\n\nAssistant:`
-
-This is a requirement of [the API](https://docs.anthropic.com/claude/reference/complete_post).
 
 ## Development
 
