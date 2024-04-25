@@ -94,9 +94,9 @@ end
 
 ### Models
 
-As of March 2024, the following models are available:
+Available Models:
 
-| Model           | Latest API model name    |
+| Name            | API Name                 |
 | --------------- | ------------------------ |
 | Claude 3 Opus   | claude-3-opus-20240229   |
 | Claude 3 Sonnet | claude-3-sonnet-20240229 |
