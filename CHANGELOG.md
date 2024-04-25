@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add new Messages endpoint - thanks [@deepakmahakale](https://github.com/deepakmahakale) for the PR, [@obie](https://github.com/obie) for the first pass, and many others for requesting and contributions!
+- Add new Messages endpoint - thanks [@svs](https://github.com/svs) for the PR, [@obie](https://github.com/obie) for the first pass, and many others for requesting and contributions!
 
 ## [0.1.0] - 2023-07-18
 
