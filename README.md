@@ -6,9 +6,7 @@
 
 Use the [Anthropic API](https://docs.anthropic.com/claude/reference/getting-started-with-the-api) with Ruby! 🤖🌌
 
-You can apply for access to the API [here](https://docs.anthropic.com/claude/docs/getting-access-to-claude).
-
-🚢 Need someone to ship critical Rails features for you, fast? I'm taking on a few new clients at an experimental crazy low price, check it out: [railsai.com](https://railsai.com?utm_source=anthropic&utm_medium=readme&utm_id=26072023)
+You can get access to the API [here](https://docs.anthropic.com/claude/docs/getting-access-to-claude).
 
 [🎮 Ruby AI Builders Discord](https://discord.gg/k4Uc224xVD) | [🐦 Twitter](https://twitter.com/alexrudall) | [🤖 OpenAI Gem](https://github.com/alexrudall/ruby-openai) | [🚂 Midjourney Gem](https://github.com/alexrudall/midjourney)
 
