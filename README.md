@@ -144,14 +144,14 @@ There are two special parameters, though, to do with... streaming. Keep reading 
 
 If you want your output to be json, it is recommended to provide an additional message like this:
 
-```
+```ruby
 [{ role: "user", content: "Give me the heights of the 3 tallest mountains. Answer in the provided JSON format. Only include JSON." },
 { role: "assistant", content: '[{"name": "Mountain Name", "height": "height in km"}]' }]
 ```
 
 Then Claude v3, even Haiku, might respond with:
 
-```
+```json
 [{"name"=>"Mount Everest", "height"=>"8.85 km"}, {"name"=>"K2", "height"=>"8.61 km"}, {"name"=>"Kangchenjunga", "height"=>"8.58 km"}]
 ```
 
@@ -159,7 +159,7 @@ Then Claude v3, even Haiku, might respond with:
 
 There are two modes of streaming: raw and preprocessed. The default is raw. You can call it like this:
 
-```
+```ruby
 Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)).messages(
   parameters: {
     model: model,
@@ -176,7 +176,7 @@ several minutes to compile the full response - which is longer than our 120 seco
 
 Here is an example of a stream you might get back:
 
-```
+```json
 {"type"=>"message_start", "message"=>{"id"=>"msg_01WMWvcZq5JEMLf6Jja4Bven", "type"=>"message", "role"=>"assistant", "model"=>"claude-3-haiku-20240307", "stop_sequence"=>nil, "usage"=>{"input_tokens"=>13, "output_tokens"=>1}, "content"=>[], "stop_reason"=>nil}}
 {"type"=>"content_block_delta", "index"=>0, "delta"=>{"type"=>"text_delta", "text"=>"There"}}
 {"type"=>"content_block_delta", "index"=>0, "delta"=>{"type"=>"text_delta", "text"=>" is"}}
@@ -204,7 +204,7 @@ Luckily, you can ask the anthropic gem to preprocess things for you!
 
 First, if you expect simple text output, you can receive it delta by delta:
 
-```
+```ruby
 Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)).messages(
   parameters: {
     model: model,
@@ -225,7 +225,7 @@ Partial JSON is not very useful. But it is common enough to request a collection
 
 If you ask it to, this gem will also do its best to sort this out for you:
 
-```
+```ruby
 Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)).messages(
   parameters: {
     model: model,
