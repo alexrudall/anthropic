@@ -28,6 +28,35 @@ module Anthropic
       Anthropic::Client.json_post(path: "/complete", parameters: parameters)
     end
 
+    # Anthropic API Parameters as of 2024-05-07:
+    #   @see https://docs.anthropic.com/claude/reference/messages_post
+    #
+    # @param [Hash] parameters
+    # @option parameters [Array] :messages - Required. An array of messages to send to the API. Each
+    #   message should have a role and content. Single message example:
+    #   +[{ role: "user", content: "Hello, Claude!" }]+
+    # @option parameters [String] :model - see https://docs.anthropic.com/claude/docs/models-overview
+    # @option parameters [Integer] :max_tokens - Required, must be less than 4096 - @see https://docs.anthropic.com/claude/docs/models-overview
+    # @option parameters [String] :system - Optional but recommended. @see https://docs.anthropic.com/claude/docs/system-prompts
+    # @option parameters [Float] :temperature - Optional, defaults to 1.0
+    # @option parameters [Proc] :stream - Optional, if present, must be a Proc that will receive the
+    #   content fragments as they come in
+    # @option parameters [Boolean] :force_json - If true, will only return valid json, and discard
+    #   anything that's not inside a valid +`{json: 'object'}`+ in the response (specific to
+    #   anthropic gem))
+    #
+    # @returns [Hash] the response from the API (after the streaming is done, if streaming)
+    #   @example:
+    # {
+    #   "id" => "msg_013xVudG9xjSvLGwPKMeVXzG",
+    #   "type" => "message",
+    #   "role" => "assistant",
+    #   "content" => [{"type" => "text", "text" => "The sky has no distinct"}],
+    #   "model" => "claude-2.1",
+    #   "stop_reason" => "max_tokens",
+    #   "stop_sequence" => nil,
+    #   "usage" => {"input_tokens" => 15, "output_tokens" => 5}
+    # }
     def messages(parameters: {})
       Anthropic::Client.json_post(path: "/messages", parameters: parameters)
     end

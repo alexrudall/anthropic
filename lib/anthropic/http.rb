@@ -1,3 +1,7 @@
+require "event_stream_parser"
+
+require_relative "http_headers"
+
 module Anthropic
   module HTTP
     def get(path:)
@@ -7,15 +11,19 @@ module Anthropic
     end
 
     def json_post(path:, parameters:)
-      to_json(conn.post(uri(path: path)) do |req|
-        if parameters[:stream].is_a?(Proc)
-          req.options.on_data = to_json_stream(user_proc: parameters[:stream])
+      streaming = parameters[:stream].is_a?(Proc)
+      _response = {}
+      response = conn.post(uri(path: path)) do |req|
+        if streaming
+          req.options.on_data = to_json_stream(user_proc: parameters[:stream], response: _response)
           parameters[:stream] = true # Necessary to tell Anthropic to stream.
         end
 
         req.headers = headers
         req.body = parameters.to_json
-      end&.body)
+      end
+
+      streaming ? _response : response.body
     end
 
     def multipart_post(path:, parameters: nil)
@@ -44,27 +52,58 @@ module Anthropic
 
     # Given a proc, returns an outer proc that can be used to iterate over a JSON stream of chunks.
     # For each chunk, the inner user_proc is called giving it the JSON object. The JSON object could
-    # be a data object or an error object as described in the Anthropic API documentation.
-    #
-    # If the JSON object for a given data or error message is invalid, it is ignored.
+    # be a data object or an error object as described in the OpenAI API documentation.
     #
     # @param user_proc [Proc] The inner proc to call for each JSON object in the chunk.
     # @return [Proc] An outer proc that iterates over a raw stream, converting it to JSON.
-    def to_json_stream(user_proc:)
-      proc do |chunk, _|
-        chunk.scan(/(?:data|error): (\{.*\})/i).flatten.each do |data|
-          user_proc.call(JSON.parse(data))
-        rescue JSON::ParserError
-          # Ignore invalid JSON.
+    def to_json_stream(user_proc:, response:)
+      parser = EventStreamParser::Parser.new
+
+      proc do |chunk, _bytes, env|
+        if env && env.status != 200
+          raise_error = Faraday::Response::RaiseError.new
+          raise_error.on_complete(env.merge(body: try_parse_json(chunk)))
+        end
+
+        # '{"id":"msg_01LMYfUXbKwWcq1ZQwjAYkJ3","type":"message","role":"assistant","model":"claude-3-haiku-20240307",
+        # "stop_sequence":null,"usage":{"input_tokens":13,"output_tokens":5},"content":[{"type":"text","text":"The
+        # sky doesn''t have"}],"stop_reason":"max_tokens"}'
+        #
+        #        event: message_delta
+        # data: {"type":"message_delta","delta":{"stop_reason":"max_tokens","stop_sequence":null},"usage":{"output_tokens":50}              }
+
+        parser.feed(chunk) do |_type, data|
+          parsed_data = JSON.parse(data)
+          case _type
+          when "message_start"
+            response.merge!(parsed_data["message"])
+            response["content"] = [{ "type" => "text", "text" => "" }]
+          when "message_delta"
+            response["usage"].merge!(parsed_data["usage"])
+            response.merge!(parsed_data["delta"])
+          when "content_block_delta"
+            response["content"][0]["text"].concat(parsed_data["delta"]["text"])
+          when "ping", "content_block_start"
+            next
+          end
+
+          user_proc.call(parsed_data) unless data == "[DONE]"
         end
       end
     end
 
     def conn(multipart: false)
-      Faraday.new do |f|
-        f.options[:timeout] = Anthropic.configuration.request_timeout
+      connection = Faraday.new do |f|
+        f.options[:timeout] = @request_timeout
         f.request(:multipart) if multipart
+        f.use MiddlewareErrors if @log_errors
+        f.response :raise_error
+        f.response :json
       end
+
+      @faraday_middleware&.call(connection)
+
+      connection
     end
 
     def uri(path:)
@@ -88,6 +127,12 @@ module Anthropic
         # as the second argument.
         Faraday::UploadIO.new(value, "", value.path)
       end
+    end
+
+    def try_parse_json(maybe_json)
+      JSON.parse(maybe_json)
+    rescue JSON::ParserError
+      maybe_json
     end
   end
 end
