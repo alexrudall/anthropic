@@ -151,7 +151,7 @@ If you want your output to be json, it is recommended to provide an additional m
 
 Then Claude v3, even Haiku, might respond with:
 
-```json
+```ruby
 [{"name"=>"Mount Everest", "height"=>"8.85 km"}, {"name"=>"K2", "height"=>"8.61 km"}, {"name"=>"Kangchenjunga", "height"=>"8.58 km"}]
 ```
 
@@ -176,7 +176,7 @@ several minutes to compile the full response - which is longer than our 120 seco
 
 Here is an example of a stream you might get back:
 
-```json
+```ruby
 {"type"=>"message_start", "message"=>{"id"=>"msg_01WMWvcZq5JEMLf6Jja4Bven", "type"=>"message", "role"=>"assistant", "model"=>"claude-3-haiku-20240307", "stop_sequence"=>nil, "usage"=>{"input_tokens"=>13, "output_tokens"=>1}, "content"=>[], "stop_reason"=>nil}}
 {"type"=>"content_block_delta", "index"=>0, "delta"=>{"type"=>"text_delta", "text"=>"There"}}
 {"type"=>"content_block_delta", "index"=>0, "delta"=>{"type"=>"text_delta", "text"=>" is"}}
