@@ -11,11 +11,10 @@ module Anthropic
     end
 
     def json_post(path:, parameters:)
-      streaming = parameters[:stream].is_a?(Proc)
-      _response = {}
+      str_resp = {}
       response = conn.post(uri(path: path)) do |req|
-        if streaming
-          req.options.on_data = to_json_stream(user_proc: parameters[:stream], response: _response)
+        if parameters[:stream].is_a?(Proc)
+          req.options.on_data = to_json_stream(user_proc: parameters[:stream], response: str_resp)
           parameters[:stream] = true # Necessary to tell Anthropic to stream.
         end
 
@@ -23,7 +22,7 @@ module Anthropic
         req.body = parameters.to_json
       end
 
-      streaming ? _response : response.body
+      str_resp.empty? ? response.body : str_resp
     end
 
     def multipart_post(path:, parameters: nil)
@@ -65,16 +64,9 @@ module Anthropic
           raise_error.on_complete(env.merge(body: try_parse_json(chunk)))
         end
 
-        # '{"id":"msg_01LMYfUXbKwWcq1ZQwjAYkJ3","type":"message","role":"assistant","model":"claude-3-haiku-20240307",
-        # "stop_sequence":null,"usage":{"input_tokens":13,"output_tokens":5},"content":[{"type":"text","text":"The
-        # sky doesn''t have"}],"stop_reason":"max_tokens"}'
-        #
-        #        event: message_delta
-        # data: {"type":"message_delta","delta":{"stop_reason":"max_tokens","stop_sequence":null},"usage":{"output_tokens":50}              }
-
-        parser.feed(chunk) do |_type, data|
+        parser.feed(chunk) do |type, data|
           parsed_data = JSON.parse(data)
-          case _type
+          case type
           when "message_start"
             response.merge!(parsed_data["message"])
             response["content"] = [{ "type" => "text", "text" => "" }]
@@ -133,6 +125,10 @@ module Anthropic
       JSON.parse(maybe_json)
     rescue JSON::ParserError
       maybe_json
+    end
+
+    def streaming?(parameters)
+      parameters[:stream].is_a?(Proc)
     end
   end
 end
