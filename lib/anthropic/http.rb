@@ -14,7 +14,7 @@ module Anthropic
       str_resp = {}
       response = conn.post(uri(path: path)) do |req|
         if parameters[:stream].is_a?(Proc)
-          req.options.on_data = to_json_stream(user_proc: parameters[:stream], response: str_resp)
+          req.options.on_data = to_json_stream(user_proc: parameters[:stream], response: str_resp, preprocess: parameters[:preprocess_stream])
           parameters[:stream] = true # Necessary to tell Anthropic to stream.
         end
 
@@ -55,8 +55,10 @@ module Anthropic
     #
     # @param user_proc [Proc] The inner proc to call for each JSON object in the chunk.
     # @return [Proc] An outer proc that iterates over a raw stream, converting it to JSON.
-    def to_json_stream(user_proc:, response:)
+    def to_json_stream(user_proc:, response:, preprocess: nil)
       parser = EventStreamParser::Parser.new
+
+      preprocess_stack = ""
 
       proc do |chunk, _bytes, env|
         if env && env.status != 200
@@ -74,12 +76,27 @@ module Anthropic
             response["usage"].merge!(parsed_data["usage"])
             response.merge!(parsed_data["delta"])
           when "content_block_delta"
-            response["content"][0]["text"].concat(parsed_data["delta"]["text"])
+            delta = parsed_data["delta"]["text"]
+
+            response["content"][0]["text"].concat(delta)
+
+            unless preprocess.nil?
+              preprocess_stack.concat(delta)
+              if preprocess.to_sym == :json
+                if preprocess_stack.strip.include?("}")
+                  user_proc.call(JSON.parse(preprocess_stack.match(/\{(?:[^{}]|\g<0>)*\}/)[0]))
+                  preprocess_stack = ""
+                end
+              elsif preprocess.to_sym == :text
+                user_proc.call(preprocess_stack, delta)
+              end
+            end
+
           when "ping", "content_block_start"
             next
           end
 
-          user_proc.call(parsed_data) unless data == "[DONE]"
+          user_proc.call(parsed_data) unless data == "[DONE]" if preprocess.nil?
         end
       end
     end

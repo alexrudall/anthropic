@@ -41,9 +41,14 @@ module Anthropic
     # @option parameters [Float] :temperature - Optional, defaults to 1.0
     # @option parameters [Proc] :stream - Optional, if present, must be a Proc that will receive the
     #   content fragments as they come in
-    # @option parameters [Boolean] :force_json - If true, will only return valid json, and discard
-    #   anything that's not inside a valid +`{json: 'object'}`+ in the response (specific to
-    #   anthropic gem))
+    # @option parameters [String] :preprocess_stream - If true, the streaming Proc will be pre-
+    #   processed. Specifically, instead of being passed a raw Hash like:
+    #   {"type"=>"content_block_delta", "index"=>0, "delta"=>{"type"=>"text_delta", "text"=>" of"}}
+    #   the Proc will instead be passed something nicer. If +preprocess_stream+ is set to +"json"+
+    #   or +:json+, then the Proc will only receive full json objects, one at a time.
+    #   If +preprocess_stream+ is set to +"text"+ or +:text+ then the Proc will receive two
+    #   arguments: the first will be the text accrued so far, and the second will be the delta
+    #   just received in the current chunk.
     #
     # @returns [Hash] the response from the API (after the streaming is done, if streaming)
     #   @example:
