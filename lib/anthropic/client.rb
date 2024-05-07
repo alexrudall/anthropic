@@ -2,13 +2,25 @@ module Anthropic
   class Client
     extend Anthropic::HTTP
 
-    def initialize(access_token: nil, organization_id: nil, uri_base: nil, request_timeout: nil,
-                   extra_headers: {})
-      Anthropic.configuration.access_token = access_token if access_token
-      Anthropic.configuration.organization_id = organization_id if organization_id
-      Anthropic.configuration.uri_base = uri_base if uri_base
-      Anthropic.configuration.request_timeout = request_timeout if request_timeout
-      Anthropic.configuration.extra_headers = extra_headers
+    CONFIG_KEYS = %i[
+      access_token
+      anthropic_version
+      api_version
+      uri_base
+      request_timeout
+      extra_headers
+    ].freeze
+
+    def initialize(config = {}, &faraday_middleware)
+      CONFIG_KEYS.each do |key|
+        # Set instance variables like api_type & access_token. Fall back to global config
+        # if not present.
+        instance_variable_set(
+          "@#{key}",
+          config[key].nil? ? Anthropic.configuration.send(key) : config[key]
+        )
+      end
+      @faraday_middleware = faraday_middleware
     end
 
     def complete(parameters: {})
