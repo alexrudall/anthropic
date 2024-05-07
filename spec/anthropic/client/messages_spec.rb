@@ -161,5 +161,41 @@ RSpec.describe Anthropic::Client do
       end
     end
 
+    context "malformed streaming preprocessed JSON" do
+      let(:model) { "claude-3-haiku-20240307" }
+      let(:messages) { [{ role: "user", content: "Give me the heights of the 3 tallest mountains. Answer in the provided JSON format. Only include JSON." },
+                        { role: "assistant", content: '[{"name": "Mountain Name", "height": "height in km"}]' }] }
+      let(:max_tokens) { 200 }
+      let(:response_objects) { [] }
+
+      let(:stream) do
+        proc do |json_object|
+          response_objects << json_object
+        end
+      end
+
+      let(:response) do
+        Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)).messages(
+          parameters: {
+            model: model,
+            messages: messages,
+            max_tokens: max_tokens,
+            stream: stream,
+            preprocess_stream: :json
+          }
+        )
+      end
+
+      let(:cassette) { "#{model} malformed streaming json #{messages[0][:content]}".downcase }
+
+      it "succeeds" do
+        VCR.use_cassette(cassette) do
+          expect(response["content"].empty?).to eq(false)
+          expect(response_objects.length).to eq(2) # One malformed object
+          expect(response_objects[0]["name"]).to eq("Mount Everest")
+        end
+      end
+    end
+
   end
 end

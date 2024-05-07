@@ -84,8 +84,18 @@ module Anthropic
               preprocess_stack.concat(delta)
               if preprocess.to_sym == :json
                 if preprocess_stack.strip.include?("}")
-                  user_proc.call(JSON.parse(preprocess_stack.match(/\{(?:[^{}]|\g<0>)*\}/)[0]))
-                  preprocess_stack = ""
+                  begin
+                    user_proc.call(JSON.parse(preprocess_stack.match(/\{(?:[^{}]|\g<0>)*\}/)[0]))
+                    preprocess_stack = ""
+                  rescue StandardError => e
+                    logger = Logger.new($stdout)
+                    logger.formatter = proc do |_severity, _datetime, _progname, msg|
+                      "\033[31mAnthropic HTTP Error (spotted in ruby-anthropic #{VERSION}): #{msg}\n\033[0m"
+                    end
+                    logger.error(e)
+                  ensure
+                    preprocess_stack = ""
+                  end
                 end
               elsif preprocess.to_sym == :text
                 user_proc.call(preprocess_stack, delta)
