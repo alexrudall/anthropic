@@ -64,34 +64,35 @@ module Anthropic
     # @return [Proc] An outer proc that iterates over a raw stream, converting it to JSON.
     def to_json_stream(user_proc:, response:, preprocess: nil)
       parser = EventStreamParser::Parser.new
-
       preprocess_stack = ""
 
       proc do |chunk, _bytes, env|
-        if env && env.status != 200
-          raise_error = Faraday::Response::RaiseError.new
-          raise_error.on_complete(env.merge(body: try_parse_json(chunk)))
-        end
+        handle_faraday_error(chunk, env)
 
         parser.feed(chunk) do |type, data|
           parsed_data = JSON.parse(data)
-          case type
-          when "message_start"
-            response.merge!(parsed_data["message"])
-            response["content"] = [{ "type" => "text", "text" => "" }]
-          when "message_delta"
-            response["usage"].merge!(parsed_data["usage"])
-            response.merge!(parsed_data["delta"])
-          when "content_block_delta"
-            delta = parsed_data["delta"]["text"]
-            response["content"][0]["text"].concat(delta)
+
+          _handle_message_type(type, parsed_data, response) do |delta|
             preprocess(preprocess, preprocess_stack, delta, user_proc) unless preprocess.nil?
-          when "ping", "content_block_start"
-            next
           end
 
           user_proc.call(parsed_data) if preprocess.nil?
         end
+      end
+    end
+
+    def _handle_message_type(type, parsed_data, response, &block)
+      case type
+      when "message_start"
+        response.merge!(parsed_data["message"])
+        response["content"] = [{ "type" => "text", "text" => "" }]
+      when "message_delta"
+        response["usage"].merge!(parsed_data["usage"])
+        response.merge!(parsed_data["delta"])
+      when "content_block_delta"
+        delta = parsed_data["delta"]["text"]
+        response["content"][0]["text"].concat(delta)
+        block.yield delta
       end
     end
 
@@ -137,6 +138,13 @@ module Anthropic
         "\033[31mAnthropic JSON Error (spotted in ruby-anthropic #{VERSION}): #{msg}\n\033[0m"
       end
       logger.error(error)
+    end
+
+    def handle_faraday_error(chunk, env)
+      return unless env&.status != 200
+
+      raise_error = Faraday::Response::RaiseError.new
+      raise_error.on_complete(env.merge(body: try_parse_json(chunk)))
     end
 
     def conn(multipart: false)

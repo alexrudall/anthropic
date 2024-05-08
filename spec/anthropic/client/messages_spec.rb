@@ -52,7 +52,7 @@ RSpec.describe Anthropic::Client do
       it "succeeds" do
         VCR.use_cassette(cassette) do
           expect(response["content"].empty?).to eq(false)
-          expect(chunks.length).to eq(53)
+          expect(chunks.length).to eq(55)
         end
       end
     end
@@ -120,7 +120,7 @@ RSpec.describe Anthropic::Client do
       it "succeeds" do
         VCR.use_cassette(cassette) do
           expect(response["content"].empty?).to eq(false)
-          expect(chunks.length).to eq(71)
+          expect(chunks.length).to eq(73)
         end
       end
     end
