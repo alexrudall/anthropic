@@ -4,12 +4,16 @@ require_relative "http_headers"
 
 module Anthropic
   module HTTP
+    include HTTPHeaders
+
+    # Unused?
     def get(path:)
       to_json(conn.get(uri(path: path)) do |req|
         req.headers = headers
       end&.body)
     end
 
+    # This is currently the workhorse for all API calls.
     def json_post(path:, parameters:)
       str_resp = {}
       response = conn.post(uri(path: path)) do |req|
@@ -25,6 +29,7 @@ module Anthropic
       str_resp.empty? ? response.body : str_resp
     end
 
+    # Unused?
     def multipart_post(path:, parameters: nil)
       to_json(conn(multipart: true).post(uri(path: path)) do |req|
         req.headers = headers.merge({ "Content-Type" => "multipart/form-data" })
@@ -32,6 +37,7 @@ module Anthropic
       end&.body)
     end
 
+    # Unused?
     def delete(path:)
       to_json(conn.delete(uri(path: path)) do |req|
         req.headers = headers
@@ -40,6 +46,7 @@ module Anthropic
 
     private
 
+    # Used only by unused methods?
     def to_json(string)
       return unless string
 
@@ -77,38 +84,59 @@ module Anthropic
             response.merge!(parsed_data["delta"])
           when "content_block_delta"
             delta = parsed_data["delta"]["text"]
-
             response["content"][0]["text"].concat(delta)
-
-            unless preprocess.nil?
-              preprocess_stack.concat(delta)
-              if preprocess.to_sym == :json
-                if preprocess_stack.strip.include?("}")
-                  begin
-                    user_proc.call(JSON.parse(preprocess_stack.match(/\{(?:[^{}]|\g<0>)*\}/)[0]))
-                    preprocess_stack = ""
-                  rescue StandardError => e
-                    logger = Logger.new($stdout)
-                    logger.formatter = proc do |_severity, _datetime, _progname, msg|
-                      "\033[31mAnthropic HTTP Error (spotted in ruby-anthropic #{VERSION}): #{msg}\n\033[0m"
-                    end
-                    logger.error(e)
-                  ensure
-                    preprocess_stack = ""
-                  end
-                end
-              elsif preprocess.to_sym == :text
-                user_proc.call(preprocess_stack, delta)
-              end
-            end
-
+            preprocess(preprocess, preprocess_stack, delta, user_proc) unless preprocess.nil?
           when "ping", "content_block_start"
             next
           end
 
-          user_proc.call(parsed_data) unless data == "[DONE]" if preprocess.nil?
+          user_proc.call(parsed_data) if preprocess.nil?
         end
       end
+    end
+
+    # Given the arguments, decides whether to preprocess JSON or text and calls the appropriate method.
+    def preprocess(directive, stack, delta, user_proc)
+      stack.concat(delta)
+      case directive
+      when :json
+        preprocess_json(stack, delta, user_proc)
+      when :text
+        preprocess_text(stack, delta, user_proc)
+      else
+        raise Anthropic::Error, "Invalid preprocess directive (valid: :text, :json): #{directive.inspect}"
+      end
+    end
+
+    # Just sends the incremental response (aka stack) and delta up to the user
+    def preprocess_text(stack, delta, user_proc)
+      user_proc.call(stack, delta)
+    end
+
+    # If the stack contains a +}+, uses a regexp to try to find a complete JSON object.
+    # If it finds one, it calls the user_proc with the JSON object. If it fails, catches and logs
+    # an exception but does not currently raise it, which means that if there is just one malformed
+    # JSON object (which does happen, albeit rarely), it will continue and process the other ones.
+    #
+    # TODO: Make the exception processing parametrisable (set logger? exit on error?)
+    def preprocess_json(stack, delta, user_proc)
+      if stack.strip.include?("}")
+        matches = stack.match(/\{(?:[^{}]|\g<0>)*\}/)
+        user_proc.call(JSON.parse(matches[0]))
+        stack.clear
+      end
+    rescue StandardError => e
+      log(e)
+    ensure
+      stack.clear if stack.strip.include?("}")
+    end
+
+    def log(error)
+      logger = Logger.new($stdout)
+      logger.formatter = proc do |_severity, _datetime, _progname, msg|
+        "\033[31mAnthropic JSON Error (spotted in ruby-anthropic #{VERSION}): #{msg}\n\033[0m"
+      end
+      logger.error(error)
     end
 
     def conn(multipart: false)
@@ -129,14 +157,7 @@ module Anthropic
       Anthropic.configuration.uri_base + Anthropic.configuration.api_version + path
     end
 
-    def headers
-      {
-        "Content-Type" => "application/json",
-        "x-api-key" => Anthropic.configuration.access_token,
-        "Anthropic-Version" => Anthropic.configuration.anthropic_version
-      }.merge(Anthropic.configuration.extra_headers)
-    end
-
+    # Unused except by unused method
     def multipart_parameters(parameters)
       parameters&.transform_values do |value|
         next value unless value.is_a?(File)
@@ -152,10 +173,6 @@ module Anthropic
       JSON.parse(maybe_json)
     rescue JSON::ParserError
       maybe_json
-    end
-
-    def streaming?(parameters)
-      parameters[:stream].is_a?(Proc)
     end
   end
 end

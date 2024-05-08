@@ -1,6 +1,6 @@
 module Anthropic
   class Client
-    extend Anthropic::HTTP
+    include Anthropic::HTTP
 
     CONFIG_KEYS = %i[
       access_token
@@ -23,9 +23,10 @@ module Anthropic
       @faraday_middleware = faraday_middleware
     end
 
+    # @deprecated (but still works while Anthropic API responds to it)
     def complete(parameters: {})
       parameters[:prompt] = wrap_prompt(prompt: parameters[:prompt])
-      Anthropic::Client.json_post(path: "/complete", parameters: parameters)
+      json_post(path: "/complete", parameters: parameters)
     end
 
     # Anthropic API Parameters as of 2024-05-07:
@@ -63,11 +64,12 @@ module Anthropic
     #   "usage" => {"input_tokens" => 15, "output_tokens" => 5}
     # }
     def messages(parameters: {})
-      Anthropic::Client.json_post(path: "/messages", parameters: parameters)
+      json_post(path: "/messages", parameters: parameters)
     end
 
     private
 
+    # Used only by @deprecated +complete+ method
     def wrap_prompt(prompt:, prefix: "\n\nHuman: ", suffix: "\n\nAssistant:")
       return if prompt.nil?
 
