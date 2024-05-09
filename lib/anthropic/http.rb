@@ -18,7 +18,8 @@ module Anthropic
       str_resp = {}
       response = conn.post(uri(path: path)) do |req|
         if parameters[:stream].is_a?(Proc)
-          req.options.on_data = to_json_stream(user_proc: parameters[:stream], response: str_resp, preprocess: parameters[:preprocess_stream])
+          req.options.on_data = to_json_stream(user_proc: parameters[:stream], response: str_resp,
+                                               preprocess: parameters[:preprocess_stream])
           parameters[:stream] = true # Necessary to tell Anthropic to stream.
         end
 
@@ -96,7 +97,7 @@ module Anthropic
       end
     end
 
-    # Given the arguments, decides whether to preprocess JSON or text and calls the appropriate method.
+    # Decides whether to preprocess JSON or text and calls the appropriate method.
     def preprocess(directive, stack, delta, user_proc)
       stack.concat(delta)
       case directive
@@ -105,7 +106,8 @@ module Anthropic
       when :text
         preprocess_text(stack, delta, user_proc)
       else
-        raise Anthropic::Error, "Invalid preprocess directive (valid: :text, :json): #{directive.inspect}"
+        raise Anthropic::Error,
+              "Invalid preprocess directive (valid: :text, :json): #{directive.inspect}"
       end
     end
 
@@ -120,7 +122,7 @@ module Anthropic
     # JSON object (which does happen, albeit rarely), it will continue and process the other ones.
     #
     # TODO: Make the exception processing parametrisable (set logger? exit on error?)
-    def preprocess_json(stack, delta, user_proc)
+    def preprocess_json(stack, _delta, user_proc)
       if stack.strip.include?("}")
         matches = stack.match(/\{(?:[^{}]|\g<0>)*\}/)
         user_proc.call(JSON.parse(matches[0]))

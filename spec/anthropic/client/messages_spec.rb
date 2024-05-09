@@ -93,8 +93,11 @@ RSpec.describe Anthropic::Client do
 
     context "streaming JSON" do
       let(:model) { "claude-3-haiku-20240307" }
-      let(:messages) { [{ role: "user", content: "Give me the heights of the 3 tallest mountains. Answer in the provided JSON format. Only include JSON." },
-                        { role: "assistant", content: '[{"name": "Mountain Name", "height": "height in km"}]' }] }
+      let(:messages) do
+        [{ role: "user", content: "Give me the heights of the 3 tallest mountains. Answer in the provided JSON format. Only include JSON." },
+         { role: "assistant",
+           content: '[{"name": "Mountain Name", "height": "height in km"}]' }]
+      end
       let(:max_tokens) { 200 }
       let(:chunks) { [] }
 
@@ -127,8 +130,11 @@ RSpec.describe Anthropic::Client do
 
     context "streaming preprocessed JSON" do
       let(:model) { "claude-3-haiku-20240307" }
-      let(:messages) { [{ role: "user", content: "Give me the heights of the 3 tallest mountains. Answer in the provided JSON format. Only include JSON." },
-                        { role: "assistant", content: '[{"name": "Mountain Name", "height": "height in km"}]' }] }
+      let(:messages) do
+        [{ role: "user", content: "Give me the heights of the 3 tallest mountains. Answer in the provided JSON format. Only include JSON." },
+         { role: "assistant",
+           content: '[{"name": "Mountain Name", "height": "height in km"}]' }]
+      end
       let(:max_tokens) { 200 }
       let(:response_objects) { [] }
 
@@ -163,8 +169,11 @@ RSpec.describe Anthropic::Client do
 
     context "malformed streaming preprocessed JSON" do
       let(:model) { "claude-3-haiku-20240307" }
-      let(:messages) { [{ role: "user", content: "Give me the heights of the 3 tallest mountains. Answer in the provided JSON format. Only include JSON." },
-                        { role: "assistant", content: '[{"name": "Mountain Name", "height": "height in km"}]' }] }
+      let(:messages) do
+        [{ role: "user", content: "Give me the heights of the 3 tallest mountains. Answer in the provided JSON format. Only include JSON." },
+         { role: "assistant",
+           content: '[{"name": "Mountain Name", "height": "height in km"}]' }]
+      end
       let(:max_tokens) { 200 }
       let(:response_objects) { [] }
 
@@ -196,6 +205,5 @@ RSpec.describe Anthropic::Client do
         end
       end
     end
-
   end
 end

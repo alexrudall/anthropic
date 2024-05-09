@@ -5,6 +5,7 @@ module Anthropic
     end
 
     private
+
     def headers
       # TODO: Implement Amazon Bedrock headers
       # if azure?
