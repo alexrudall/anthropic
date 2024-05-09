@@ -160,12 +160,12 @@ Then Claude v3, even Haiku, might respond with:
 There are two modes of streaming: raw and preprocessed. The default is raw. You can call it like this:
 
 ```ruby
-Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)).messages(
+client.messages(
   parameters: {
-    model: model,
-    messages: messages,
-    max_tokens: max_tokens,
-    stream: Proc.new { |chunk| process_your(chunk) }
+    model: "claude-3-haiku-20240307",
+    messages: [{ role: "user", content: "How high is the sky?" }],
+    max_tokens: 50,
+    stream: Proc.new { |chunk| print chunk }
   }
 )
 ```
@@ -205,11 +205,11 @@ Luckily, you can ask the anthropic gem to preprocess things for you!
 First, if you expect simple text output, you can receive it delta by delta:
 
 ```ruby
-Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)).messages(
+client.messages(
   parameters: {
-    model: model,
-    messages: messages,
-    max_tokens: max_tokens,
+    model: "claude-3-haiku-20240307",
+    messages: [{ role: "user", content: "How high is the sky?" }],
+    max_tokens: 50,
     stream: Proc.new { |incremental_response, delta| process_your(incremental_response, delta) },
     preprocess_stream: :text
   }
@@ -226,11 +226,11 @@ Partial JSON is not very useful. But it is common enough to request a collection
 If you ask it to, this gem will also do its best to sort this out for you:
 
 ```ruby
-Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)).messages(
+client.messages(
   parameters: {
-    model: model,
-    messages: messages,
-    max_tokens: max_tokens,
+    model: "claude-3-haiku-20240307",
+    messages: [{ role: "user", content: "How high is the sky?" }],
+    max_tokens: 50,
     stream: Proc.new { |json_object| process_your(json_object) },
     preprocess_stream: :json
   }
