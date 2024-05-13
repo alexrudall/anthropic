@@ -21,6 +21,7 @@ module Anthropic
           req.options.on_data = to_json_stream(user_proc: parameters[:stream], response: str_resp,
                                                preprocess: parameters[:preprocess_stream])
           parameters[:stream] = true # Necessary to tell Anthropic to stream.
+          parameters.delete(:preprocess_stream)
         end
 
         req.headers = headers
