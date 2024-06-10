@@ -1,10 +1,11 @@
 RSpec.describe Anthropic::Client do
+  let(:json_prompt) { "Answer in the provided JSON format. Only include JSON." }
+
   describe "#messages" do
     context "with all required parameters (:model, :messages, :max_tokens)" do
       let(:model) { "claude-3-haiku-20240307" }
       let(:messages) { [{ role: "user", content: "How high is the sky?" }] }
       let(:max_tokens) { 5 }
-      let(:json_prompt) { "Answer in the provided JSON format. Only include JSON." }
 
       let(:response) do
         Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)).messages(

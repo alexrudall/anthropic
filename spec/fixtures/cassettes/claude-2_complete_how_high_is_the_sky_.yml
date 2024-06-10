@@ -8,12 +8,12 @@ http_interactions:
       string: '{"model":"claude-2","max_tokens_to_sample":5,"prompt":"\n\nHuman: How
         high is the sky?\n\nAssistant:"}'
     headers:
-      Content-Type:
-      - application/json
       X-Api-Key:
       - "<ANTHROPIC_API_KEY>"
       Anthropic-Version:
       - '2023-06-01'
+      Content-Type:
+      - application/json
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
@@ -26,7 +26,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 07 May 2024 18:29:27 GMT
+      - Mon, 10 Jun 2024 13:44:11 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -34,9 +34,9 @@ http_interactions:
       Connection:
       - keep-alive
       Request-Id:
-      - req_01ErBrETPn8PsPvGWTfagKw8
+      - req_013BtiMCAupAuJ1dSKEKuQk7
       X-Cloud-Trace-Context:
-      - ad14367d1d74093a2e30d7b74f2bb2ed
+      - 8037a5b8e7f934583a4a6272b8a16987
       Via:
       - 1.1 google
       Cf-Cache-Status:
@@ -44,10 +44,10 @@ http_interactions:
       Server:
       - cloudflare
       Cf-Ray:
-      - 8803468c0b4848b6-LHR
+      - 8919cb68deee635b-LHR
     body:
       encoding: ASCII-8BIT
-      string: '{"type":"completion","id":"compl_01HgheXepu78x1LrTQ9s8JKF","completion":"
-        The sky has no definitive","stop_reason":"max_tokens","model":"claude-2.1","stop":null,"log_id":"compl_01HgheXepu78x1LrTQ9s8JKF"}'
-  recorded_at: Tue, 07 May 2024 18:29:27 GMT
+      string: '{"type":"completion","id":"compl_01RCNYLKbgpXie5MaBbYFCVj","completion":"
+        The sky has no definitive","stop_reason":"max_tokens","model":"claude-2.1","stop":null,"log_id":"compl_01RCNYLKbgpXie5MaBbYFCVj"}'
+  recorded_at: Mon, 10 Jun 2024 13:44:11 GMT
 recorded_with: VCR 6.1.0
