@@ -133,6 +133,116 @@ response = client.messages(
 # => }
 ```
 
+#### Additional parameters
+
+You can add other parameters to the parameters hash, like `temperature` and even `top_k` or `top_p`. They will just be passed to the Anthropic server. You
+can read more about the supported parameters [here](https://docs.anthropic.com/claude/reference/messages_post).
+
+There are two special parameters, though, to do with... streaming. Keep reading to find out more.
+
+#### JSON
+
+If you want your output to be json, it is recommended to provide an additional message like this:
+
+```ruby
+[{ role: "user", content: "Give me the heights of the 3 tallest mountains. Answer in the provided JSON format. Only include JSON." },
+{ role: "assistant", content: '[{"name": "Mountain Name", "height": "height in km"}]' }]
+```
+
+Then Claude v3, even Haiku, might respond with:
+
+```ruby
+[{"name"=>"Mount Everest", "height"=>"8.85 km"}, {"name"=>"K2", "height"=>"8.61 km"}, {"name"=>"Kangchenjunga", "height"=>"8.58 km"}]
+```
+
+### Streaming
+
+There are two modes of streaming: raw and preprocessed. The default is raw. You can call it like this:
+
+```ruby
+client.messages(
+  parameters: {
+    model: "claude-3-haiku-20240307",
+    messages: [{ role: "user", content: "How high is the sky?" }],
+    max_tokens: 50,
+    stream: Proc.new { |chunk| print chunk }
+  }
+)
+```
+
+This still returns a regular response at the end, but also gives you direct access to every single chunk returned by Anthropic as they come in. Even if you don't want to
+use the streaming, you may find this useful to avoid timeouts, which can happen if you send Opus a large input context, and expect a long response... It has been known to take
+several minutes to compile the full response - which is longer than our 120 second default timeout. But when streaming, the connection does not time out.
+
+Here is an example of a stream you might get back:
+
+```ruby
+{"type"=>"message_start", "message"=>{"id"=>"msg_01WMWvcZq5JEMLf6Jja4Bven", "type"=>"message", "role"=>"assistant", "model"=>"claude-3-haiku-20240307", "stop_sequence"=>nil, "usage"=>{"input_tokens"=>13, "output_tokens"=>1}, "content"=>[], "stop_reason"=>nil}}
+{"type"=>"content_block_delta", "index"=>0, "delta"=>{"type"=>"text_delta", "text"=>"There"}}
+{"type"=>"content_block_delta", "index"=>0, "delta"=>{"type"=>"text_delta", "text"=>" is"}}
+{"type"=>"content_block_delta", "index"=>0, "delta"=>{"type"=>"text_delta", "text"=>" no"}}
+{"type"=>"content_block_delta", "index"=>0, "delta"=>{"type"=>"text_delta", "text"=>" single"}}
+{"type"=>"content_block_delta", "index"=>0, "delta"=>{"type"=>"text_delta", "text"=>" defin"}}
+{"type"=>"content_block_delta", "index"=>0, "delta"=>{"type"=>"text_delta", "text"=>"itive"}}
+{"type"=>"content_block_delta", "index"=>0, "delta"=>{"type"=>"text_delta", "text"=>" \""}}
+...
+{"type"=>"content_block_delta", "index"=>0, "delta"=>{"type"=>"text_delta", "text"=>"'s"}}
+{"type"=>"content_block_delta", "index"=>0, "delta"=>{"type"=>"text_delta", "text"=>" atmosphere"}}
+{"type"=>"content_block_delta", "index"=>0, "delta"=>{"type"=>"text_delta", "text"=>" extends"}}
+{"type"=>"content_block_delta", "index"=>0, "delta"=>{"type"=>"text_delta", "text"=>" up"}}
+{"type"=>"content_block_delta", "index"=>0, "delta"=>{"type"=>"text_delta", "text"=>" to"}}
+{"type"=>"content_block_delta", "index"=>0, "delta"=>{"type"=>"text_delta", "text"=>" about"}}
+{"type"=>"content_block_stop", "index"=>0}
+{"type"=>"message_delta", "delta"=>{"stop_reason"=>"max_tokens", "stop_sequence"=>nil}, "usage"=>{"output_tokens"=>50}}
+{"type"=>"message_stop"}
+```
+
+Now, you may find this... somewhat less than practical. Surely, the vast majority of developers will not want to deal with so much
+boilerplate json.
+
+Luckily, you can ask the anthropic gem to preprocess things for you!
+
+First, if you expect simple text output, you can receive it delta by delta:
+
+```ruby
+client.messages(
+  parameters: {
+    model: "claude-3-haiku-20240307",
+    messages: [{ role: "user", content: "How high is the sky?" }],
+    max_tokens: 50,
+    stream: Proc.new { |incremental_response, delta| process_your(incremental_response, delta) },
+    preprocess_stream: :text
+  }
+)
+```
+
+The first block argument, `incremental_response`, accrues everything that's been returned so far, so you don't have to. If you just want the last bit,
+then use the second, `delta` argument.
+
+But what if you want to stream JSON?
+
+Partial JSON is not very useful. But it is common enough to request a collection of JSON objects as a response, as in our earlier example of asking for the heights of the 3 tallest mountains.
+
+If you ask it to, this gem will also do its best to sort this out for you:
+
+```ruby
+client.messages(
+  parameters: {
+    model: "claude-3-haiku-20240307",
+    messages: [{ role: "user", content: "How high is the sky?" }],
+    max_tokens: 50,
+    stream: Proc.new { |json_object| process_your(json_object) },
+    preprocess_stream: :json
+  }
+)
+```
+
+Each time a `}` is reached in the stream, the preprocessor will take what it has in the preprocessing stack, pick out whatever's between the widest `{` and `}`, and try to parse it into a JSON object.
+If it succeeds, it will pass you the json object, reset its preprocessing stack, and carry on.
+
+If the parsing fails despite reaching a `}`, currently, it will catch the Error, log it to `$stdout`, ignore the malformed object, reset the preprocessing stack and carry on. This does mean that it is possible,
+if the AI is sending some malformed JSON (which can happen, albeit rarely), that some objects will be lost.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can run `bin/console` for an interactive prompt that will allow you to experiment.

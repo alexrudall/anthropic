@@ -25,24 +25,29 @@ http_interactions:
       code: 200
       message: OK
     headers:
+      Date:
+      - Tue, 07 May 2024 18:29:27 GMT
       Content-Type:
       - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
       Request-Id:
-      - b5a12f0ec9900c47ed5c9254d2794f72c14afa6c61571a11ce33f45034ae7bce
+      - req_01ErBrETPn8PsPvGWTfagKw8
       X-Cloud-Trace-Context:
-      - 10e11e101cb2e344ac40eb006d258e04
-      Date:
-      - Tue, 18 Jul 2023 13:42:05 GMT
-      Server:
-      - Google Frontend
-      Content-Length:
-      - '179'
+      - ad14367d1d74093a2e30d7b74f2bb2ed
       Via:
       - 1.1 google
-      Alt-Svc:
-      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cf-Cache-Status:
+      - DYNAMIC
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 8803468c0b4848b6-LHR
     body:
-      encoding: UTF-8
-      string: '{"completion":" The sky has no definitive","stop_reason":"max_tokens","model":"claude-2.0","stop":null,"log_id":"b5a12f0ec9900c47ed5c9254d2794f72c14afa6c61571a11ce33f45034ae7bce"}'
-  recorded_at: Tue, 18 Jul 2023 13:42:05 GMT
+      encoding: ASCII-8BIT
+      string: '{"type":"completion","id":"compl_01HgheXepu78x1LrTQ9s8JKF","completion":"
+        The sky has no definitive","stop_reason":"max_tokens","model":"claude-2.1","stop":null,"log_id":"compl_01HgheXepu78x1LrTQ9s8JKF"}'
+  recorded_at: Tue, 07 May 2024 18:29:27 GMT
 recorded_with: VCR 6.1.0
