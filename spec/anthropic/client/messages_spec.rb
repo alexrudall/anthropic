@@ -4,6 +4,7 @@ RSpec.describe Anthropic::Client do
       let(:model) { "claude-3-haiku-20240307" }
       let(:messages) { [{ role: "user", content: "How high is the sky?" }] }
       let(:max_tokens) { 5 }
+      let(:json_prompt) { "Answer in the provided JSON format. Only include JSON." }
 
       let(:response) do
         Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)).messages(
@@ -94,7 +95,7 @@ RSpec.describe Anthropic::Client do
     context "streaming JSON" do
       let(:model) { "claude-3-haiku-20240307" }
       let(:messages) do
-        [{ role: "user", content: "Give me the heights of the 3 tallest mountains. Answer in the provided JSON format. Only include JSON." },
+        [{ role: "user", content: "Give me the height of the 3 tallest mountains. #{json_prompt}" },
          { role: "assistant",
            content: '[{"name": "Mountain Name", "height": "height in km"}]' }]
       end
@@ -131,7 +132,7 @@ RSpec.describe Anthropic::Client do
     context "streaming preprocessed JSON" do
       let(:model) { "claude-3-haiku-20240307" }
       let(:messages) do
-        [{ role: "user", content: "Give me the heights of the 3 tallest mountains. Answer in the provided JSON format. Only include JSON." },
+        [{ role: "user", content: "Give me the height of the 3 tallest mountains. #{json_prompt}" },
          { role: "assistant",
            content: '[{"name": "Mountain Name", "height": "height in km"}]' }]
       end
@@ -170,7 +171,7 @@ RSpec.describe Anthropic::Client do
     context "malformed streaming preprocessed JSON" do
       let(:model) { "claude-3-haiku-20240307" }
       let(:messages) do
-        [{ role: "user", content: "Give me the heights of the 3 tallest mountains. Answer in the provided JSON format. Only include JSON." },
+        [{ role: "user", content: "Give me the height of the 3 tallest mountains. #{json_prompt}" },
          { role: "assistant",
            content: '[{"name": "Mountain Name", "height": "height in km"}]' }]
       end
