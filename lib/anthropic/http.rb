@@ -2,6 +2,7 @@ require "event_stream_parser"
 
 require_relative "http_headers"
 
+# rubocop:disable Metrics/ModuleLength
 module Anthropic
   module HTTP
     include HTTPHeaders
@@ -14,6 +15,7 @@ module Anthropic
     end
 
     # This is currently the workhorse for all API calls.
+    # rubocop:disable Metrics/MethodLength
     def json_post(path:, parameters:)
       str_resp = {}
       response = conn.post(uri(path: path)) do |req|
@@ -30,6 +32,7 @@ module Anthropic
 
       str_resp.empty? ? response.body : str_resp
     end
+    # rubocop:enable Metrics/MethodLength
 
     # Unused?
     def multipart_post(path:, parameters: nil)
@@ -64,6 +67,7 @@ module Anthropic
     #
     # @param user_proc [Proc] The inner proc to call for each JSON object in the chunk.
     # @return [Proc] An outer proc that iterates over a raw stream, converting it to JSON.
+    # rubocop:disable Metrics/MethodLength
     def to_json_stream(user_proc:, response:, preprocess: nil)
       parser = EventStreamParser::Parser.new
       preprocess_stack = ""
@@ -82,7 +86,9 @@ module Anthropic
         end
       end
     end
+    # rubocop:enable Metrics/MethodLength
 
+    # rubocop:disable Metrics/MethodLength
     def _handle_message_type(type, parsed_data, response, &block)
       case type
       when "message_start"
@@ -97,6 +103,7 @@ module Anthropic
         block.yield delta
       end
     end
+    # rubocop:enable Metrics/MethodLength
 
     # Decides whether to preprocess JSON or text and calls the appropriate method.
     def preprocess(directive, stack, delta, user_proc)
@@ -187,3 +194,4 @@ module Anthropic
     end
   end
 end
+# rubocop:enable Metrics/ModuleLength
