@@ -73,7 +73,9 @@ module Anthropic
       preprocess_stack = ""
 
       proc do |chunk, _bytes, env|
-        handle_faraday_error(chunk, env)
+        # Versions of Faraday < 2.5.0 do not include an `env` argument,
+        # so we have to assume they are successful
+        handle_faraday_error(chunk, env) if env
 
         parser.feed(chunk) do |type, data|
           parsed_data = JSON.parse(data)
