@@ -207,5 +207,34 @@ RSpec.describe Anthropic::Client do
         end
       end
     end
+
+    context "with all required parameters (:model, :messages, :max_tokens)" do
+      let(:model) { "claude-3-haiku-20240307" }
+      let(:data)  { Marshal.load(File.binread("#{Dir.pwd}/spec/fixtures/image_base64")) }
+      let(:source) { { type: "base64", media_type: "image/png", data: data } }
+      let(:messages) {
+        [{ role: "user",
+           content: [{ type: "image", source: source }, { type: "text", "text": "What is this" }] }]
+      }
+      let(:max_tokens) { 50 }
+
+      let(:response) do
+        Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)).messages(
+          parameters: {
+            model: model,
+            messages: messages,
+            max_tokens: max_tokens
+          }
+        )
+      end
+
+      let(:cassette) { "#{model} vision #{messages[0][:content][1][:text]}".downcase }
+
+      it "succeeds" do
+        VCR.use_cassette(cassette) do
+          expect(response["content"].empty?).to eq(false) # Response should still be false!
+        end
+      end
+    end
   end
 end
