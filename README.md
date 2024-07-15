@@ -133,6 +133,52 @@ response = client.messages(
 # => }
 ```
 
+#### Vision
+
+Claude 3 family of models comes with vision capabilities that allow Claude to understand and analyze images.
+
+Transform an image to base64 and send to the API.
+
+```ruby
+require 'base64'
+
+image = File.open(FILE_PATH, 'rb') { |file| file.read }
+
+imgbase64 = Base64.strict_encode64(image)
+
+response = client.messages(
+  parameters: {
+    model: "claude-3-haiku-20240307", # claude-3-opus-20240229, claude-3-sonnet-20240229
+    system: "Respond only in Spanish.",
+    messages: [
+      {"role": "user", "content": [
+        {
+          "type":"image","source":
+          {"type":"base64","media_type":"image/png", imgbase64 }
+        },
+        {"type":"text","text":"What is this"}
+        ]
+      }
+    ],
+    max_tokens: 1000
+  }
+)
+
+# => {
+# =>   "id" => "msg_0123MiRVCgSG2PaQZwCGbgmV",
+# =>   "type" => "message",
+# =>   "role" => "assistant",
+# =>   "content" => [{"type"=>"text", "text"=>"This
+# =>    image depicts a person, presumably a student or young adult, holding a tablet
+# =>    device. "}],
+# =>   "model" => "claude-3-haiku-20240307",
+# =>   "stop_reason" => "end_turn",
+# =>   "stop_sequence" => nil,
+# =>   "usage" => {"input_tokens"=>17, "output_tokens"=>32}
+# => }
+```
+
+
 #### Additional parameters
 
 You can add other parameters to the parameters hash, like `temperature` and even `top_k` or `top_p`. They will just be passed to the Anthropic server. You
