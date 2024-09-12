@@ -99,7 +99,7 @@ module Anthropic
         response.merge!(parsed_data["delta"])
       when "content_block_delta"
         delta = parsed_data["delta"]["text"]
-        response["content"][0]["text"].concat(delta)
+        response["content"][0]["text"].concat(delta) if delta
         block.yield delta
       end
     end
