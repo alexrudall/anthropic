@@ -26,7 +26,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Mon, 10 Jun 2024 13:44:11 GMT
+      - Wed, 09 Oct 2024 09:18:17 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -34,20 +34,22 @@ http_interactions:
       Connection:
       - keep-alive
       Request-Id:
-      - req_013BtiMCAupAuJ1dSKEKuQk7
+      - req_01286TumLcaguSuWjYNNPuCP
       X-Cloud-Trace-Context:
-      - 8037a5b8e7f934583a4a6272b8a16987
+      - 6ce081698b0c854469690aa94823bab6
       Via:
       - 1.1 google
       Cf-Cache-Status:
       - DYNAMIC
+      X-Robots-Tag:
+      - none
       Server:
       - cloudflare
       Cf-Ray:
-      - 8919cb68deee635b-LHR
+      - 8cfd4849487c770d-LHR
     body:
       encoding: ASCII-8BIT
-      string: '{"type":"completion","id":"compl_01RCNYLKbgpXie5MaBbYFCVj","completion":"
-        The sky has no definitive","stop_reason":"max_tokens","model":"claude-2.1","stop":null,"log_id":"compl_01RCNYLKbgpXie5MaBbYFCVj"}'
-  recorded_at: Mon, 10 Jun 2024 13:44:11 GMT
+      string: '{"type":"completion","id":"compl_01T8unZuSwepVmgUvZStgu7h","completion":"
+        The sky doesn''t have","stop_reason":"max_tokens","model":"claude-2.1","stop":null,"log_id":"compl_01T8unZuSwepVmgUvZStgu7h"}'
+  recorded_at: Wed, 09 Oct 2024 09:18:17 GMT
 recorded_with: VCR 6.1.0
