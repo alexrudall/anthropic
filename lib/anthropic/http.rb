@@ -16,10 +16,10 @@ module Anthropic
 
     # This is currently the workhorse for all API calls.
     # rubocop:disable Metrics/MethodLength
-    def json_post(path:, parameters:)
+    def json_post(path:, parameters:, custom_headers: {})
       str_resp = {}
       response = conn.post(uri(path: path)) do |req|
-        if parameters[:stream].is_a?(Proc)
+        if parameters.respond_to?(:key?) && parameters[:stream].is_a?(Proc)
           req.options.on_data = to_json_stream(user_proc: parameters[:stream], response: str_resp,
                                                preprocess: parameters[:preprocess_stream])
           parameters[:stream] = true # Necessary to tell Anthropic to stream.
@@ -27,6 +27,7 @@ module Anthropic
         end
 
         req.headers = headers
+        req.headers.merge!(custom_headers) if custom_headers.any?
         req.body = parameters.to_json
       end
 
