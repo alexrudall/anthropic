@@ -97,6 +97,21 @@ module Anthropic
       json_post(path: "/messages/batches", parameters: { "requests" => requests_parameters }, custom_headers:)
     end
 
+    # allows using the batch API via `client.messages.batch` method.
+    def messages
+      MessagesBatcher.new(self)
+    end
+
+    class MessagesBatcher
+      def initialize(client)
+        @client = client
+      end
+
+      def batch(requests_parameters)
+        @client.batch_messages(requests_parameters)
+      end
+    end
+
     private
 
     # Used only by @deprecated +complete+ method
