@@ -107,7 +107,7 @@ module Anthropic
 
     # Decides whether to preprocess JSON or text and calls the appropriate method.
     def preprocess(directive, stack, delta, user_proc)
-      stack.concat(delta)
+      stack.concat(delta) if delta # Alters the stack.
       case directive
       when :json
         preprocess_json(stack, delta, user_proc)
