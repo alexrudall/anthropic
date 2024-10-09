@@ -99,7 +99,7 @@ module Anthropic
         response.merge!(parsed_data["delta"])
       when "content_block_delta"
         delta = parsed_data["delta"]["text"]
-        response["content"][0]["text"].concat(delta)
+        response["content"][0]["text"].concat(delta) if delta
         block.yield delta
       end
     end
@@ -107,7 +107,7 @@ module Anthropic
 
     # Decides whether to preprocess JSON or text and calls the appropriate method.
     def preprocess(directive, stack, delta, user_proc)
-      stack.concat(delta)
+      stack.concat(delta) if delta # Alters the stack.
       case directive
       when :json
         preprocess_json(stack, delta, user_proc)

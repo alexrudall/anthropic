@@ -4,7 +4,6 @@ AllCops:
   SuggestExtensions: false
 
 Style/Documentation:
-  # Skips checking to make sure top level modules / classes have a comment.
   Enabled: false
 
 Layout/LineLength:
@@ -24,3 +23,8 @@ Style/StringLiterals:
 
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+# Disable Security/MarshalLoad rule only for spec files
+Security/MarshalLoad:
+  Exclude:
+    - "spec/**/*"

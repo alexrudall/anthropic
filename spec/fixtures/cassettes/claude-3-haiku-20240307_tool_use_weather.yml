@@ -5,8 +5,10 @@ http_interactions:
     uri: https://api.anthropic.com/v1/messages
     body:
       encoding: UTF-8
-      string: '{"model":"claude-3-haiku-20240307","messages":[{"role":"user","content":"How
-        high is the sky?"}],"max_tokens":5}'
+      string: '{"model":"claude-3-haiku-20240307","messages":[{"role":"user","content":"What
+        is the weather like in San Francisco?"}],"max_tokens":1024,"tools":[{"name":"get_weather","description":"Get
+        the current weather in a given location","input_schema":{"type":"object","properties":{"location":{"type":"string","description":"The
+        city and state, e.g. San Francisco, CA"}},"required":["location"]}}]}'
     headers:
       X-Api-Key:
       - "<ANTHROPIC_API_KEY>"
@@ -26,7 +28,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Wed, 09 Oct 2024 09:18:17 GMT
+      - Wed, 09 Oct 2024 09:18:26 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -36,7 +38,7 @@ http_interactions:
       Anthropic-Ratelimit-Requests-Limit:
       - '50'
       Anthropic-Ratelimit-Requests-Remaining:
-      - '49'
+      - '48'
       Anthropic-Ratelimit-Requests-Reset:
       - '2024-10-09T09:19:07Z'
       Anthropic-Ratelimit-Tokens-Limit:
@@ -44,11 +46,11 @@ http_interactions:
       Anthropic-Ratelimit-Tokens-Remaining:
       - '50000'
       Anthropic-Ratelimit-Tokens-Reset:
-      - '2024-10-09T09:18:17Z'
+      - '2024-10-09T09:18:26Z'
       Request-Id:
-      - req_01Kk6xt1mEWyeF9ssfsF6Mod
+      - req_016WdEV3sDxEzPbdsT6wnfSJ
       X-Cloud-Trace-Context:
-      - 119e86381c0876ac7476c416f928d912
+      - 8debc0979c910aa322ed93b16a156206
       Via:
       - 1.1 google
       Cf-Cache-Status:
@@ -58,10 +60,11 @@ http_interactions:
       Server:
       - cloudflare
       Cf-Ray:
-      - 8cfd484ebe0293ff-LHR
+      - 8cfd488149dd88bf-LHR
     body:
       encoding: ASCII-8BIT
-      string: '{"id":"msg_01J6x6QWDoWfM2G8ExSf5qMF","type":"message","role":"assistant","model":"claude-3-haiku-20240307","content":[{"type":"text","text":"The
-        sky doesn''t have"}],"stop_reason":"max_tokens","stop_sequence":null,"usage":{"input_tokens":13,"output_tokens":5}}'
-  recorded_at: Wed, 09 Oct 2024 09:18:17 GMT
+      string: '{"id":"msg_0117CnhT3Kx1s5MU5Fack4Xm","type":"message","role":"assistant","model":"claude-3-haiku-20240307","content":[{"type":"text","text":"Okay,
+        let me check the weather for San Francisco:"},{"type":"tool_use","id":"toolu_01CDxAY77YRdhk3C1Vk8aNog","name":"get_weather","input":{"location":"San
+        Francisco, CA"}}],"stop_reason":"tool_use","stop_sequence":null,"usage":{"input_tokens":354,"output_tokens":69}}'
+  recorded_at: Wed, 09 Oct 2024 09:18:26 GMT
 recorded_with: VCR 6.1.0
