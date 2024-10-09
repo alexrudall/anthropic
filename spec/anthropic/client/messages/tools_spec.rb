@@ -101,28 +101,7 @@ RSpec.describe Anthropic::Client do
           expect(stream_results.length).to be > 0
 
           combined_content = stream_results.map { |result| result[1].to_s }.join
-          require 'byebug'; byebug
           expect(combined_content).to include("San Francisco")
-
-          # tool_use_result = stream_results.find { |result| result[0]["type"] == "content_block_start" && result[0]["content_block"]["type"] == "tool_use" }
-          # expect(tool_use_result).not_to be_nil
-
-          # tool_use = tool_use_result[0]["content_block"]
-          # expect(tool_use["name"]).to eq("get_weather")
-
-          # input_json = stream_results.select { |result| result[0]["type"] == "content_block_delta" && result[0]["delta"]["type"] == "input_json_delta" }
-          #                            .map { |result| result[1] }
-          #                            .join
-          # expect(input_json).to include("location")
-          # expect(input_json).to include("San Francisco, CA")
-
-          # expect(stream_results.any? { |result| result[0]["type"] == "content_block_stop" }).to be true
-
-          # message_stop = stream_results.find { |result| result[0]["type"] == "message_delta" }
-          # expect(message_stop).not_to be_nil
-          # expect(message_stop[0]["delta"]["stop_reason"]).to eq("tool_use")
-
-          # expect(stream_results.last[0]["type"]).to eq("message_stop")
         end
       end
     end
