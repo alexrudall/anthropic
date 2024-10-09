@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Fix for Tool streaming.
+- Fix for Tool streaming. Thanks to [@Leteyski](https://github.com/Leteyski) for this fix!
 
 ## [0.3.0] - 2024-06-10
 
