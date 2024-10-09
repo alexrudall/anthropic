@@ -212,10 +212,10 @@ RSpec.describe Anthropic::Client do
       let(:model) { "claude-3-haiku-20240307" }
       let(:data)  { Marshal.load(File.binread("#{Dir.pwd}/spec/fixtures/image_base64")) }
       let(:source) { { type: "base64", media_type: "image/png", data: data } }
-      let(:messages) {
+      let(:messages) do
         [{ role: "user",
-           content: [{ type: "image", source: source }, { type: "text", "text": "What is this" }] }]
-      }
+           content: [{ type: "image", source: source }, { type: "text", text: "What is this" }] }]
+      end
       let(:max_tokens) { 50 }
 
       let(:response) do

@@ -73,11 +73,15 @@ RSpec.describe Anthropic::Client do
           expect(message_start).not_to be_nil
           expect(message_start["message"]["model"]).to eq(model)
 
-          tool_use_start = chunks.find { |chunk| chunk["type"] == "content_block_start" && chunk["content_block"]["type"] == "tool_use" }
+          tool_use_start = chunks.find do |chunk|
+            chunk["type"] == "content_block_start" && chunk["content_block"]["type"] == "tool_use"
+          end
           expect(tool_use_start).not_to be_nil
           expect(tool_use_start["content_block"]["name"]).to eq("get_weather")
 
-          input_json = chunks.select { |chunk| chunk["type"] == "content_block_delta" && chunk["delta"]["type"] == "input_json_delta" }
+          input_json = chunks.select do |chunk|
+                         chunk["type"] == "content_block_delta" && chunk["delta"]["type"] == "input_json_delta"
+                       end
                              .map { |chunk| chunk["delta"]["partial_json"] }
                              .join
           expect(input_json).to include("location")
