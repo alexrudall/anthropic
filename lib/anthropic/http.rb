@@ -1,5 +1,4 @@
 require "event_stream_parser"
-require "pry"
 
 require_relative "http_headers"
 
