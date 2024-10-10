@@ -16,6 +16,7 @@ module Anthropic
 
     # This is currently the workhorse for all API calls.
     # rubocop:disable Metrics/MethodLength
+    # rubocop:disable Metrics/AbcSize
     def json_post(path:, parameters:, custom_headers: {})
       str_resp = {}
       response = conn.post(uri(path: path)) do |req|
@@ -34,6 +35,7 @@ module Anthropic
       str_resp.empty? ? response.body : str_resp
     end
     # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
 
     # Unused?
     def multipart_post(path:, parameters: nil)

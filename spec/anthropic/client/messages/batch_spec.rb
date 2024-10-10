@@ -3,7 +3,7 @@ RSpec.describe Anthropic::Client do
   let(:json_prompt) { "Answer in the provided JSON format. Only include JSON." }
 
   describe "#messages.batch" do
-    context "batch messages" do
+    context "#create batch messages" do
       let(:request1) do
         {
           custom_id: "first-prompt-in-my-batch",
@@ -37,9 +37,10 @@ RSpec.describe Anthropic::Client do
       end
 
       let(:response) do
-        Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)).messages.batch(
-          [request1, request2]
-        )
+        Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY",
+                                                      nil)).messages.batch.create(
+                                                        [request1, request2]
+                                                      )
       end
 
       it "succeeds" do

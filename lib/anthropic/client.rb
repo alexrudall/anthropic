@@ -66,7 +66,7 @@ module Anthropic
     #   "usage" => {"input_tokens" => 15, "output_tokens" => 5}
     # }
     def messages(**args)
-      return Batch.new(self) unless args && args[:parameters]
+      return MessagesBatcher.new(self) unless args && args[:parameters]
 
       json_post(path: "/messages", parameters: args[:parameters])
     end
