@@ -59,9 +59,24 @@ module Anthropic
     #
     # @param Integer :id - ID of the Message Batch.
     #
-    # @returns [Hash] the response from the API (after the streaming is done, if streaming)
+    # @returns [Hash] the same response' shape as #create method.
     def get(id)
       @client.get(path: "/messages/batches/#{id}", custom_headers: @custom_headers)
+    end
+
+    # Anthropic API Parameters as of 2024-10-09:
+    #   @see https://docs.anthropic.com/en/api/creating-message-batches
+    #
+    # @param Integer :id - ID of the Message Batch.
+    #
+    # Streams the results of a Message Batch as a .jsonl file.
+    # Each line in the file is a JSON object containing the result of a
+    # single request in the Message Batch.
+    # Results are not guaranteed to be in the same order as requests.
+    # Use the custom_id field to match results to requests.
+    def results(id)
+      @client.get(path: "/messages/batches/#{id}/results", custom_headers: @custom_headers,
+                  jsonl: true)
     end
   end
 end

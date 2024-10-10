@@ -20,6 +20,23 @@ RSpec.describe Anthropic::Client do
       end
     end
 
+    describe "#results" do
+      context "#results batch messages" do
+        let(:response) do
+          Anthropic::Client.new(
+            access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)
+          ).messages.batch.results("msgbatch_01668jySCZeCpMLsxFcroNnN")
+        end
+
+        it "succeeds" do
+          cassette = "batch_messages_results"
+          VCR.use_cassette(cassette) do
+            expect(response.empty?).to eq(false)
+          end
+        end
+      end
+    end
+
     describe "#create" do
       context "#create batch messages" do
         let(:request1) do
