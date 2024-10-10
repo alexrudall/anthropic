@@ -1,0 +1,55 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.anthropic.com/v1/messages/batches/msgbatch_01S2zP9e26DkVoocf8s6dqTm
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      X-Api-Key:
+      - "<ANTHROPIC_API_KEY>"
+      Anthropic-Version:
+      - '2023-06-01'
+      Content-Type:
+      - application/json
+      Anthropic-Beta:
+      - message-batches-2024-09-24
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 10 Oct 2024 02:05:27 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Request-Id:
+      - req_01UQLpkyKyMGPoiCYxBT2PC7
+      X-Cloud-Trace-Context:
+      - b33f907520f0fc45c115818853ad9ba6
+      Via:
+      - 1.1 google
+      Cf-Cache-Status:
+      - DYNAMIC
+      X-Robots-Tag:
+      - none
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 8d030ba64d3afbae-POA
+    body:
+      encoding: ASCII-8BIT
+      string: '{"id":"msgbatch_01S2zP9e26DkVoocf8s6dqTm","type":"message_batch","processing_status":"ended","request_counts":{"processing":0,"succeeded":2,"errored":0,"canceled":0,"expired":0},"ended_at":"2024-10-10T01:55:12.022622+00:00","created_at":"2024-10-10T01:53:45.563766+00:00","expires_at":"2024-10-11T01:53:45.563766+00:00","cancel_initiated_at":null,"results_url":"https://api.anthropic.com/v1/messages/batches/msgbatch_01S2zP9e26DkVoocf8s6dqTm/results"}'
+  recorded_at: Thu, 10 Oct 2024 02:05:27 GMT
+recorded_with: VCR 6.1.0

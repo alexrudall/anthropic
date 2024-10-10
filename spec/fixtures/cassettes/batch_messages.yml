@@ -54,4 +54,58 @@ http_interactions:
       encoding: ASCII-8BIT
       string: '{"id":"msgbatch_01UnEPrhN631BC6548pxNQ6q","type":"message_batch","processing_status":"in_progress","request_counts":{"processing":2,"succeeded":0,"errored":0,"canceled":0,"expired":0},"ended_at":null,"created_at":"2024-10-09T20:47:26.801533+00:00","expires_at":"2024-10-10T20:47:26.801533+00:00","cancel_initiated_at":null,"results_url":null}'
   recorded_at: Wed, 09 Oct 2024 20:47:26 GMT
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/messages/batches
+    body:
+      encoding: UTF-8
+      string: '{"requests":[{"custom_id":"first-prompt-in-my-batch","params":{"model":"claude-3-haiku-20240307","max_tokens":100,"messages":[{"role":"user","content":"Hey
+        Claude, tell me a short fun fact about video games!"}]}},{"custom_id":"second-prompt-in-my-batch","params":{"model":"claude-3-5-sonnet-20240620","max_tokens":100,"messages":[{"role":"user","content":"Hey
+        Claude, tell me a short fun fact about bees!"}]}}]}'
+    headers:
+      X-Api-Key:
+      - "<ANTHROPIC_API_KEY>"
+      Anthropic-Version:
+      - '2023-06-01'
+      Content-Type:
+      - application/json
+      Anthropic-Beta:
+      - message-batches-2024-09-24
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 10 Oct 2024 02:05:28 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Request-Id:
+      - req_01HYNvmSed3TharuL6zK6EhK
+      X-Cloud-Trace-Context:
+      - 6351a3488dd6bb9ecc324bc372b32721
+      Via:
+      - 1.1 google
+      Cf-Cache-Status:
+      - DYNAMIC
+      X-Robots-Tag:
+      - none
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 8d030ba8b9c3fbb6-POA
+    body:
+      encoding: ASCII-8BIT
+      string: '{"id":"msgbatch_01BJQckR8zWNFrKvwZdru5ez","type":"message_batch","processing_status":"in_progress","request_counts":{"processing":2,"succeeded":0,"errored":0,"canceled":0,"expired":0},"ended_at":null,"created_at":"2024-10-10T02:05:27.962142+00:00","expires_at":"2024-10-11T02:05:27.962142+00:00","cancel_initiated_at":null,"results_url":null}'
+  recorded_at: Thu, 10 Oct 2024 02:05:27 GMT
 recorded_with: VCR 6.1.0
