@@ -2,6 +2,9 @@ module Anthropic
   class MessagesBatcher
     def initialize(client)
       @client = client
+
+      # Anthropic Batch API is in beta and requires a custom header
+      @custom_headers = { "anthropic-beta" => "message-batches-2024-09-24" }
     end
 
     def batch
@@ -43,13 +46,22 @@ module Anthropic
       #   "results_url"=>nil
       # }
       def create(requests_parameters)
-        custom_headers = { "anthropic-beta" => "message-batches-2024-09-24" }
         @client.json_post(
           path: "/messages/batches",
           parameters: { "requests" => requests_parameters },
-          custom_headers: custom_headers
+          custom_headers: @custom_headers
         )
       end
+    end
+
+    # Anthropic API Parameters as of 2024-10-09:
+    #   @see https://docs.anthropic.com/en/api/creating-message-batches
+    #
+    # @param Integer :id - ID of the Message Batch.
+    #
+    # @returns [Hash] the response from the API (after the streaming is done, if streaming)
+    def get(id)
+      @client.get(path: "/messages/batches/#{id}", custom_headers: @custom_headers)
     end
   end
 end
