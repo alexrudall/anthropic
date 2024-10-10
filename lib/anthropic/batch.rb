@@ -78,5 +78,10 @@ module Anthropic
       @client.get(path: "/messages/batches/#{id}/results", custom_headers: @custom_headers,
                   jsonl: true)
     end
+
+    def list(parameters: nil)
+      @client.get(path: "/messages/batches", parameters: parameters,
+                  custom_headers: @custom_headers)
+    end
   end
 end

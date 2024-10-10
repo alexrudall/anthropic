@@ -1,0 +1,55 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.anthropic.com/v1/messages/batches
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      X-Api-Key:
+      - "<ANTHROPIC_API_KEY>"
+      Anthropic-Version:
+      - '2023-06-01'
+      Content-Type:
+      - application/json
+      Anthropic-Beta:
+      - message-batches-2024-09-24
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 10 Oct 2024 02:44:22 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Request-Id:
+      - req_0141iNsSdwMGgypHT6jyRLEP
+      X-Cloud-Trace-Context:
+      - 8a8418b6ad655d37a0beddff7714765e
+      Via:
+      - 1.1 google
+      Cf-Cache-Status:
+      - DYNAMIC
+      X-Robots-Tag:
+      - none
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 8d0344a65e42fbae-POA
+    body:
+      encoding: ASCII-8BIT
+      string: '{"data":[{"id":"msgbatch_01UyfdHBqu86dZemHEtnbMoM","type":"message_batch","processing_status":"in_progress","request_counts":{"processing":2,"succeeded":0,"errored":0,"canceled":0,"expired":0},"ended_at":null,"created_at":"2024-10-10T02:44:11.712870+00:00","expires_at":"2024-10-11T02:44:11.712870+00:00","cancel_initiated_at":null,"results_url":null},{"id":"msgbatch_01LyRV1t5iNYxRjfh5TVJVAF","type":"message_batch","processing_status":"ended","request_counts":{"processing":0,"succeeded":2,"errored":0,"canceled":0,"expired":0},"ended_at":"2024-10-10T02:14:47.292286+00:00","created_at":"2024-10-10T02:13:43.723115+00:00","expires_at":"2024-10-11T02:13:43.723115+00:00","cancel_initiated_at":null,"results_url":"https://api.anthropic.com/v1/messages/batches/msgbatch_01LyRV1t5iNYxRjfh5TVJVAF/results"},{"id":"msgbatch_01BJQckR8zWNFrKvwZdru5ez","type":"message_batch","processing_status":"ended","request_counts":{"processing":0,"succeeded":2,"errored":0,"canceled":0,"expired":0},"ended_at":"2024-10-10T02:07:20.308671+00:00","created_at":"2024-10-10T02:05:27.962142+00:00","expires_at":"2024-10-11T02:05:27.962142+00:00","cancel_initiated_at":null,"results_url":"https://api.anthropic.com/v1/messages/batches/msgbatch_01BJQckR8zWNFrKvwZdru5ez/results"},{"id":"msgbatch_01S2zP9e26DkVoocf8s6dqTm","type":"message_batch","processing_status":"ended","request_counts":{"processing":0,"succeeded":2,"errored":0,"canceled":0,"expired":0},"ended_at":"2024-10-10T01:55:12.022622+00:00","created_at":"2024-10-10T01:53:45.563766+00:00","expires_at":"2024-10-11T01:53:45.563766+00:00","cancel_initiated_at":null,"results_url":"https://api.anthropic.com/v1/messages/batches/msgbatch_01S2zP9e26DkVoocf8s6dqTm/results"},{"id":"msgbatch_01VMWq9tRMKm3ULw6MPAAnvB","type":"message_batch","processing_status":"ended","request_counts":{"processing":0,"succeeded":2,"errored":0,"canceled":0,"expired":0},"ended_at":"2024-10-10T01:46:15.410729+00:00","created_at":"2024-10-10T01:44:30.423168+00:00","expires_at":"2024-10-11T01:44:30.423168+00:00","cancel_initiated_at":null,"results_url":"https://api.anthropic.com/v1/messages/batches/msgbatch_01VMWq9tRMKm3ULw6MPAAnvB/results"},{"id":"msgbatch_01G5BH1cQYuAP2JyrjihotmR","type":"message_batch","processing_status":"ended","request_counts":{"processing":0,"succeeded":2,"errored":0,"canceled":0,"expired":0},"ended_at":"2024-10-10T00:53:40.417542+00:00","created_at":"2024-10-10T00:52:49.788227+00:00","expires_at":"2024-10-11T00:52:49.788227+00:00","cancel_initiated_at":null,"results_url":"https://api.anthropic.com/v1/messages/batches/msgbatch_01G5BH1cQYuAP2JyrjihotmR/results"},{"id":"msgbatch_01E7yY37TgWmm8pBs5LHE1y5","type":"message_batch","processing_status":"ended","request_counts":{"processing":0,"succeeded":2,"errored":0,"canceled":0,"expired":0},"ended_at":"2024-10-09T21:26:36.230547+00:00","created_at":"2024-10-09T21:17:36.478240+00:00","expires_at":"2024-10-10T21:17:36.478240+00:00","cancel_initiated_at":null,"results_url":"https://api.anthropic.com/v1/messages/batches/msgbatch_01E7yY37TgWmm8pBs5LHE1y5/results"},{"id":"msgbatch_01EBN1FhtoSdYZcGzoRbRe8o","type":"message_batch","processing_status":"ended","request_counts":{"processing":0,"succeeded":2,"errored":0,"canceled":0,"expired":0},"ended_at":"2024-10-09T21:18:04.490109+00:00","created_at":"2024-10-09T21:15:22.639193+00:00","expires_at":"2024-10-10T21:15:22.639193+00:00","cancel_initiated_at":null,"results_url":"https://api.anthropic.com/v1/messages/batches/msgbatch_01EBN1FhtoSdYZcGzoRbRe8o/results"},{"id":"msgbatch_01FSoxtv8t6DBKRigtcf27br","type":"message_batch","processing_status":"ended","request_counts":{"processing":0,"succeeded":2,"errored":0,"canceled":0,"expired":0},"ended_at":"2024-10-09T21:17:59.793996+00:00","created_at":"2024-10-09T21:15:11.627104+00:00","expires_at":"2024-10-10T21:15:11.627104+00:00","cancel_initiated_at":null,"results_url":"https://api.anthropic.com/v1/messages/batches/msgbatch_01FSoxtv8t6DBKRigtcf27br/results"},{"id":"msgbatch_01UnEPrhN631BC6548pxNQ6q","type":"message_batch","processing_status":"ended","request_counts":{"processing":0,"succeeded":2,"errored":0,"canceled":0,"expired":0},"ended_at":"2024-10-09T20:53:06.828197+00:00","created_at":"2024-10-09T20:47:26.801533+00:00","expires_at":"2024-10-10T20:47:26.801533+00:00","cancel_initiated_at":null,"results_url":"https://api.anthropic.com/v1/messages/batches/msgbatch_01UnEPrhN631BC6548pxNQ6q/results"},{"id":"msgbatch_01668jySCZeCpMLsxFcroNnN","type":"message_batch","processing_status":"ended","request_counts":{"processing":0,"succeeded":2,"errored":0,"canceled":0,"expired":0},"ended_at":"2024-10-09T20:24:00.568803+00:00","created_at":"2024-10-09T20:18:11.480471+00:00","expires_at":"2024-10-10T20:18:11.480471+00:00","cancel_initiated_at":null,"results_url":"https://api.anthropic.com/v1/messages/batches/msgbatch_01668jySCZeCpMLsxFcroNnN/results"}],"has_more":false,"first_id":"msgbatch_01UyfdHBqu86dZemHEtnbMoM","last_id":"msgbatch_01668jySCZeCpMLsxFcroNnN"}'
+  recorded_at: Thu, 10 Oct 2024 02:44:22 GMT
+recorded_with: VCR 6.1.0
