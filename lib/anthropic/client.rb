@@ -1,3 +1,5 @@
+require_relative "batch"
+
 module Anthropic
   class Client
     include Anthropic::HTTP
@@ -63,8 +65,10 @@ module Anthropic
     #   "stop_sequence" => nil,
     #   "usage" => {"input_tokens" => 15, "output_tokens" => 5}
     # }
-    def messages(parameters: {})
-      json_post(path: "/messages", parameters: parameters)
+    def messages(**args)
+      return MessagesBatcher.new(self) unless args && args[:parameters]
+
+      json_post(path: "/messages", parameters: args[:parameters])
     end
 
     private
