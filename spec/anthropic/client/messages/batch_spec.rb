@@ -103,5 +103,21 @@ RSpec.describe Anthropic::Client do
         end
       end
     end
+
+    describe "#cancel" do
+      context "#cancel batch messages" do
+        let(:response) do
+          client = Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil))
+          client.messages.batch.cancel(b_id)
+        end
+
+        it "succeeds" do
+          cassette = "batch_messages_cancel"
+          VCR.use_cassette(cassette) do
+            expect(response["processing_status"]).to eq("canceling")
+          end
+        end
+      end
+    end
   end
 end
