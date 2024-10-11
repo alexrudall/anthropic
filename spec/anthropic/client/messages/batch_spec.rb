@@ -40,9 +40,8 @@ RSpec.describe Anthropic::Client do
     describe "#results" do
       context "#results batch messages" do
         let(:response) do
-          Anthropic::Client.new(
-            access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)
-          ).messages.batch.results("msgbatch_01668jySCZeCpMLsxFcroNnN")
+          client = Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil))
+          client.messages.batch.results("msgbatch_01668jySCZeCpMLsxFcroNnN")
         end
 
         it "succeeds" do
@@ -108,7 +107,7 @@ RSpec.describe Anthropic::Client do
       context "#cancel batch messages" do
         let(:response) do
           client = Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil))
-          client.messages.batch.cancel(b_id)
+          client.messages.batch.cancel("msgbatch_015UrTAMKm5nXgAL7GRubKWB")
         end
 
         it "succeeds" do
