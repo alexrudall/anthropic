@@ -79,9 +79,46 @@ module Anthropic
                   jsonl: true)
     end
 
+    # Anthropic API Parameters as of 2024-10-09:
+    #   @see https://docs.anthropic.com/en/api/listing-message-batches
+    #
+    # List all Message Batches within a Workspace. Most recently created batches are returned first.
+    # @param Integer :before_id - ID of the object to use as a cursor for pagination.
+    #    When provided, returns the page of results immediately before this object.
+    #
+    # @param Integer :after_id - ID of the object to use as a cursor for pagination.
+    #    When provided, returns the page of results immediately after this object.
+    #
+    # @param Integer :limit, Number of items to return per page.
+    #   Defaults to 20. Ranges from 1 to 100.
+    #
+    # @returns [Hash] the response from the API
     def list(parameters: nil)
       @client.get(path: "/messages/batches", parameters: parameters,
                   custom_headers: @custom_headers)
+    end
+
+    # Anthropic API Parameters as of 2024-10-09:
+    #   @see https://docs.anthropic.com/en/api/creating-message-batches
+    #
+    # @param Integer :id - ID of the Message Batch.
+    #
+    # @returns [Hash] the response from the API
+    #
+    # Cancel a Message Batch
+    # Batches may be canceled any time before processing ends. Once cancellation is initiated,
+    #   the batch enters a canceling state, at which time the system may complete any in-progress,
+    #   non-interruptible requests before finalizing cancellation.
+    #
+    # The number of canceled requests is specified in request_counts.
+    # To determine which requests were canceled, check the individual results within the batch.
+    # Note that cancellation may not result in any canceled requests if they were non-interruptible.
+    def cancel(id)
+      @client.json_post(
+        path: "/messages/batches/#{id}/cancel",
+        parameters: {},
+        custom_headers: @custom_headers
+      )
     end
   end
 end
