@@ -289,6 +289,16 @@ If it succeeds, it will pass you the json object, reset its preprocessing stack,
 If the parsing fails despite reaching a `}`, currently, it will catch the Error, log it to `$stdout`, ignore the malformed object, reset the preprocessing stack and carry on. This does mean that it is possible,
 if the AI is sending some malformed JSON (which can happen, albeit rarely), that some objects will be lost.
 
+##### Faraday middleware
+
+You can pass [Faraday middleware](https://lostisland.github.io/faraday/#/middleware/index) to the client in a block, eg. to enable verbose logging with Ruby's [Logger](https://ruby-doc.org/3.2.2/stdlibs/logger/Logger.html):
+
+```ruby
+client = Anthropic::Client.new do |f|
+  f.response :logger, Logger.new($stdout), bodies: true
+end
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can run `bin/console` for an interactive prompt that will allow you to experiment.
