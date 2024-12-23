@@ -94,13 +94,51 @@ end
 
 Available Models:
 
-| Name            | API Name                 |
-| --------------- | ------------------------ |
-| Claude 3 Opus   | claude-3-opus-20240229   |
-| Claude 3 Sonnet | claude-3-sonnet-20240229 |
-| Claude 3 Haiku  | claude-3-haiku-20240307  |
+| Name              | API Name                   |
+| ----------------- | -------------------------- |
+| Claude 3.5 Sonnet | claude-3-5-sonnet-20241022 |
+| Claude 3.5 Haiku  | claude-3-5-haiku-20241022  |
+| Claude 3 Opus     | claude-3-opus-20240229     |
+| Claude 3 Sonnet   | claude-3-sonnet-20240229   |
+| Claude 3 Haiku    | claude-3-haiku-20240307    |
 
 You can find the latest model names in the [Anthropic API documentation](https://docs.anthropic.com/claude/docs/models-overview#model-recommendations).
+
+You can also fetch the models via the API.
+
+```
+GET https://api.anthropic.com/v1/models
+```
+
+```ruby
+response = client.list
+# => {
+# =>  "data": [
+# =>     {
+# =>       "type": "model",
+# =>       "id": "claude-3-5-sonnet-20241022",
+# =>       "display_name": "Claude 3.5 Sonnet (New)",
+# =>       "created_at": "2024-10-22T00:00:00Z"
+# =>     }
+# =>   ]
+# => }
+```
+
+Additionally, you can fetch details on a specific model.
+
+```
+GET https://api.anthropic.com/v1/models/{model_id}
+```
+
+```ruby
+response = client.models.retrieve(id: "claude-3-5-sonnet-20241022")
+# => {
+# =>   "type": "model",
+# =>   "id": "claude-3-5-sonnet-20241022",
+# =>   "display_name": "Claude 3.5 Sonnet (New)",
+# =>   "created_at": "2024-10-22T00:00:00Z"
+# => }
+```
 
 ### Messages
 
@@ -177,7 +215,6 @@ response = client.messages(
 # =>   "usage" => {"input_tokens"=>17, "output_tokens"=>32}
 # => }
 ```
-
 
 #### Additional parameters
 

@@ -67,6 +67,10 @@ module Anthropic
       json_post(path: "/messages", parameters: parameters)
     end
 
+    def models
+      @models ||= Anthropic::Models.new(client: self)
+    end
+
     private
 
     # Used only by @deprecated +complete+ method
