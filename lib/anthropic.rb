@@ -4,6 +4,7 @@ require "faraday/multipart"
 require_relative "anthropic/http"
 require_relative "anthropic/client"
 require_relative "anthropic/version"
+require_relative "anthropic/models"
 
 module Anthropic
   class Error < StandardError; end

@@ -7,11 +7,11 @@ module Anthropic
   module HTTP
     include HTTPHeaders
 
-    # Unused?
-    def get(path:)
-      to_json(conn.get(uri(path: path)) do |req|
+    # Used for fetching models
+    def get(path:, query_params: {})
+      conn.get(uri(path: path, query_params: query_params)) do |req|
         req.headers = headers
-      end&.body)
+      end&.body
     end
 
     # This is currently the workhorse for all API calls.
@@ -173,8 +173,15 @@ module Anthropic
       connection
     end
 
-    def uri(path:)
-      Anthropic.configuration.uri_base + Anthropic.configuration.api_version + path
+    def uri(path:, query_params: {})
+      Anthropic.configuration.uri_base + Anthropic.configuration.api_version + path +
+        build_query_params(query_params)
+    end
+
+    def build_query_params(query_params)
+      return "" if query_params.empty?
+
+      "?#{query_params.map { |key, value| "#{key}=#{value}" }.join('&')}"
     end
 
     # Unused except by unused method
