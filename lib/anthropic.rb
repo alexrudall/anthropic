@@ -12,23 +12,23 @@ module Anthropic
   class MiddlewareErrors < Faraday::Middleware
     def call(env)
       @app.call(env)
-    rescue Faraday::Error => e
-      raise e unless e.response.is_a?(Hash)
+      rescue Faraday::Error => e
+        raise e unless e.response.is_a?(Hash)
 
-      logger = Logger.new($stdout)
-      logger.formatter = proc do |_severity, _datetime, _progname, msg|
-        "\033[31mAnthropic HTTP Error (spotted in ruby-anthropic #{VERSION}): #{msg}\n\033[0m"
+        logger = Logger.new($stdout)
+        logger.formatter = proc do |_severity, _datetime, _progname, msg|
+          "\033[31mAnthropic HTTP Error (spotted in ruby-anthropic #{VERSION}): #{msg}\n\033[0m"
+        end
+        logger.error(e.response[:body])
+
+        raise e
       end
-      logger.error(e.response[:body])
-
-      raise e
-    end
   end
 
   class Configuration
     attr_writer :access_token
     attr_accessor :anthropic_version, :api_version, :extra_headers,
-                  :request_timeout, :uri_base
+                  :request_timeout, :uri_base, :log_errors
 
     DEFAULT_API_VERSION = "v1".freeze
     DEFAULT_ANTHROPIC_VERSION = "2023-06-01".freeze
@@ -39,6 +39,7 @@ module Anthropic
       @access_token = nil
       @api_version = DEFAULT_API_VERSION
       @anthropic_version = DEFAULT_ANTHROPIC_VERSION
+      @log_errors = false
       @uri_base = DEFAULT_URI_BASE
       @request_timeout = DEFAULT_REQUEST_TIMEOUT
       @extra_headers = {}

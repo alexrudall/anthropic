@@ -7,6 +7,7 @@ module Anthropic
       anthropic_version
       api_version
       uri_base
+      log_errors
       request_timeout
       extra_headers
     ].freeze

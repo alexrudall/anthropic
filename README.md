@@ -77,6 +77,7 @@ client = Anthropic::Client.new(
   access_token: "access_token_goes_here",
   anthropic_version: "2023-01-01", # Optional
   request_timeout: 240 # Optional
+  log_errors = true # Optional
 )
 ```
 
@@ -87,6 +88,7 @@ Anthropic.configure do |config|
   config.access_token = ENV.fetch("ANTHROPIC_API_KEY")
   config.anthropic_version = "2023-01-01" # Optional
   config.request_timeout = 240 # Optional
+  config.log_errors = true # Optional
 end
 ```
 
