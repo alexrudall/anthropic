@@ -12,17 +12,17 @@ module Anthropic
   class MiddlewareErrors < Faraday::Middleware
     def call(env)
       @app.call(env)
-      rescue Faraday::Error => e
-        raise e unless e.response.is_a?(Hash)
+    rescue Faraday::Error => e
+      raise e unless e.response.is_a?(Hash)
 
-        logger = Logger.new($stdout)
-        logger.formatter = proc do |_severity, _datetime, _progname, msg|
-          "\033[31mAnthropic HTTP Error (spotted in ruby-anthropic #{VERSION}): #{msg}\n\033[0m"
-        end
-        logger.error(e.response[:body])
-
-        raise e
+      logger = Logger.new($stdout)
+      logger.formatter = proc do |_severity, _datetime, _progname, msg|
+        "\033[31mAnthropic HTTP Error (spotted in ruby-anthropic #{VERSION}): #{msg}\n\033[0m"
       end
+      logger.error(e.response[:body])
+
+      raise e
+    end
   end
 
   class Configuration
