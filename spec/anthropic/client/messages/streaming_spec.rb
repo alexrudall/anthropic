@@ -169,6 +169,64 @@ RSpec.describe Anthropic::Client do
       end
     end
 
+    context "streaming large preprocessed JSON" do
+      let(:model) { "claude-3-haiku-20240307" }
+      let(:messages) do
+        [
+          {
+            role: "user",
+            content: <<~TXT.strip
+              Give me 10 cool, large tweets about Ruby. Follow this format:
+
+              [
+                {
+                  "title": "put tweet title here",
+                  "tweet": "put tweet text here"
+                }
+              ]
+
+              CRITICAL: Ensure JSON is valid. Escape all necessary characters.
+              Don't output anything else, only JSON.
+            TXT
+          },
+          {
+            role: "assistant",
+            content: ""
+          }
+        ]
+      end
+      let(:max_tokens) { 4096 }
+      let(:response_objects) { [] }
+
+      let(:stream) do
+        proc do |json_object|
+          response_objects << json_object
+        end
+      end
+
+      let(:response) do
+        Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)).messages(
+          parameters: {
+            model: model,
+            messages: messages,
+            max_tokens: max_tokens,
+            stream: stream,
+            preprocess_stream: :json
+          }
+        )
+      end
+
+      let(:cassette) { "#{model} streaming json #{messages[0][:content]}".downcase }
+
+      it "succeeds" do
+        VCR.use_cassette(cassette) do
+          expect(response["content"].empty?).to eq(false)
+          expect(response_objects.count).to eq(10)
+          expect(response_objects).to eq(fixture_json("preprocessed_long_json.json"))
+        end
+      end
+    end
+
     context "malformed streaming preprocessed JSON" do
       let(:model) { "claude-3-haiku-20240307" }
       let(:messages) do
