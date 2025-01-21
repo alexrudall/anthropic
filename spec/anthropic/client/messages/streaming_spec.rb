@@ -130,7 +130,7 @@ RSpec.describe Anthropic::Client do
       end
     end
 
-    context "streaming preprocessed JSON" do
+    context "preprocessing small JSON array" do
       let(:model) { "claude-3-haiku-20240307" }
       let(:messages) do
         [{ role: "user", content: "Give me the height of the 3 tallest mountains. #{json_prompt}" },
@@ -169,7 +169,7 @@ RSpec.describe Anthropic::Client do
       end
     end
 
-    context "streaming large preprocessed JSON" do
+    context "preprocessing large JSON array" do
       let(:model) { "claude-3-haiku-20240307" }
       let(:messages) do
         [
@@ -227,7 +227,7 @@ RSpec.describe Anthropic::Client do
       end
     end
 
-    context "streaming empty preprocessed JSON array" do
+    context "preprocessing empty JSON array" do
       let(:model) { "claude-3-haiku-20240307" }
       let(:messages) do
         [
@@ -279,7 +279,7 @@ RSpec.describe Anthropic::Client do
       end
     end
 
-    context "streaming preprocessed single small JSON object" do
+    context "preprocessing single small JSON object" do
       let(:model) { "claude-3-haiku-20240307" }
       let(:messages) do
         [
@@ -332,7 +332,7 @@ RSpec.describe Anthropic::Client do
       end
     end
 
-    context "streaming preprocessed single large JSON object" do
+    context "preprocessing single large JSON object" do
       let(:model) { "claude-3-haiku-20240307" }
       let(:messages) do
         [
