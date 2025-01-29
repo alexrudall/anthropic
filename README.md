@@ -43,7 +43,10 @@ require "anthropic"
 For a quick test you can pass your token directly to a new client:
 
 ```ruby
-client = Anthropic::Client.new(access_token: "access_token_goes_here")
+client = Anthropic::Client.new(
+  access_token: "access_token_goes_here",
+  log_errors: true # Highly recommended in development, so you can see what errors Anthropic is returning. Not recommended in production because it could leak private data to your logs.
+)
 ```
 
 ### With Config
@@ -53,10 +56,11 @@ For a more robust setup, you can configure the gem with your API keys, for examp
 ```ruby
 Anthropic.configure do |config|
   # With dotenv
-  config.access_token = ENV.fetch("ANTHROPIC_API_KEY")
+  config.access_token = ENV.fetch("ANTHROPIC_API_KEY"),
   # OR
   # With Rails credentials
-  config.access_token = Rails.application.credentials.dig(:anthropic, :api_key)
+  config.access_token = Rails.application.credentials.dig(:anthropic, :api_key),
+  config.log_errors = true # Highly recommended in development, so you can see what errors Anthropic is returning. Not recommended in production because it could leak private data to your logs.
 end
 ```
 
@@ -75,6 +79,7 @@ The default timeout for any request using this library is 120 seconds. You can c
 ```ruby
 client = Anthropic::Client.new(
   access_token: "access_token_goes_here",
+  log_errors: true, # Optional
   anthropic_version: "2023-01-01", # Optional
   request_timeout: 240 # Optional
 )
@@ -88,6 +93,16 @@ Anthropic.configure do |config|
   config.anthropic_version = "2023-01-01" # Optional
   config.request_timeout = 240 # Optional
 end
+```
+
+#### Logging
+
+##### Errors
+By default, the `anthropic` gem does not log any `Faraday::Error`s encountered while executing a network request to avoid leaking data (e.g. 400s, 500s, SSL errors and more - see [here](https://www.rubydoc.info/github/lostisland/faraday/Faraday/Error) for a complete list of subclasses of `Faraday::Error` and what can cause them).
+
+If you would like to enable this functionality, you can set `log_errors` to `true` when configuring the client:
+```ruby
+client = Anthropic::Client.new(log_errors: true)
 ```
 
 ### Models
@@ -132,6 +147,62 @@ response = client.messages(
 # =>   "usage" => {"input_tokens"=>17, "output_tokens"=>32}
 # => }
 ```
+
+### Batches
+The Batches API can be used to process multiple Messages API requests at once. Once a Message Batch is created, it begins processing immediately. Batches can contain up to 100,000 requests and be up to 256 MB in total size.
+
+Create a batch of message requests:
+```ruby
+response = client.messages.batches.create(
+  parameters: {
+    requests: [
+      {
+        custom_id: "my-first-request",
+        params: {
+          model: "claude-3-haiku-20240307",
+          max_tokens: 1024,
+          messages: [
+            { role: "user", content: "Hello, world" }
+          ]
+        }
+      },
+      {
+        custom_id: "my-second-request",
+        params: {
+          model: "claude-3-haiku-20240307",
+          max_tokens: 1024,
+          messages: [
+            { role: "user", content: "Hi again, friend" }
+          ]
+        }
+      }
+    ]
+  }
+)
+batch_id = response["id"]
+```
+
+You can retrieve information about a specific batch:
+```ruby
+batch = client.messages.batches.get(id: batch_id)
+```
+
+To cancel a batch that is in progress:
+```ruby
+client.messages.batches.cancel(id: batch_id)
+```
+
+List all batches:
+```ruby
+client.messages.batches.list
+```
+
+Once processing ends, you can fetch the results:
+```ruby
+results = client.messages.batches.results(id: batch_id)
+```
+
+Results are returned as a .jsonl file, with each line containing the result of a single request. Results may be in any order - use the custom_id field to match results to requests.
 
 #### Vision
 

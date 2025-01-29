@@ -26,7 +26,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Wed, 09 Oct 2024 09:18:17 GMT
+      - Wed, 29 Jan 2025 12:42:57 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -34,21 +34,31 @@ http_interactions:
       Connection:
       - keep-alive
       Anthropic-Ratelimit-Requests-Limit:
-      - '50'
+      - '4000'
       Anthropic-Ratelimit-Requests-Remaining:
-      - '49'
+      - '3999'
       Anthropic-Ratelimit-Requests-Reset:
-      - '2024-10-09T09:19:07Z'
+      - '2025-01-29T12:42:57Z'
+      Anthropic-Ratelimit-Input-Tokens-Limit:
+      - '400000'
+      Anthropic-Ratelimit-Input-Tokens-Remaining:
+      - '400000'
+      Anthropic-Ratelimit-Input-Tokens-Reset:
+      - '2025-01-29T12:42:57Z'
+      Anthropic-Ratelimit-Output-Tokens-Limit:
+      - '80000'
+      Anthropic-Ratelimit-Output-Tokens-Remaining:
+      - '80000'
+      Anthropic-Ratelimit-Output-Tokens-Reset:
+      - '2025-01-29T12:42:57Z'
       Anthropic-Ratelimit-Tokens-Limit:
-      - '50000'
+      - '480000'
       Anthropic-Ratelimit-Tokens-Remaining:
-      - '50000'
+      - '480000'
       Anthropic-Ratelimit-Tokens-Reset:
-      - '2024-10-09T09:18:17Z'
+      - '2025-01-29T12:42:57Z'
       Request-Id:
-      - req_01Kk6xt1mEWyeF9ssfsF6Mod
-      X-Cloud-Trace-Context:
-      - 119e86381c0876ac7476c416f928d912
+      - req_01DuXcybjB1V39JZS58XGLgJ
       Via:
       - 1.1 google
       Cf-Cache-Status:
@@ -58,10 +68,10 @@ http_interactions:
       Server:
       - cloudflare
       Cf-Ray:
-      - 8cfd484ebe0293ff-LHR
+      - 90994e1b7a36a67e-LHR
     body:
       encoding: ASCII-8BIT
-      string: '{"id":"msg_01J6x6QWDoWfM2G8ExSf5qMF","type":"message","role":"assistant","model":"claude-3-haiku-20240307","content":[{"type":"text","text":"The
-        sky doesn''t have"}],"stop_reason":"max_tokens","stop_sequence":null,"usage":{"input_tokens":13,"output_tokens":5}}'
-  recorded_at: Wed, 09 Oct 2024 09:18:17 GMT
+      string: '{"id":"msg_01N7u7DcZTi4ZK7F6n2ZPMcr","type":"message","role":"assistant","model":"claude-3-haiku-20240307","content":[{"type":"text","text":"There
+        is no definitive"}],"stop_reason":"max_tokens","stop_sequence":null,"usage":{"input_tokens":13,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":5}}'
+  recorded_at: Wed, 29 Jan 2025 12:42:57 GMT
 recorded_with: VCR 6.1.0

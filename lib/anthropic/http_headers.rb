@@ -11,7 +11,7 @@ module Anthropic
       # if azure?
       #   azure_headers
       # else
-      #   openai_headers
+      #   anthropic_headers
       # end.merge(extra_headers)
       anthropic_headers.merge(extra_headers)
     end
