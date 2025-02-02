@@ -154,7 +154,7 @@ response = client.messages(
       {"role": "user", "content": [
         {
           "type":"image","source":
-          {"type":"base64","media_type":"image/png", imgbase64 }
+          {"type":"base64","media_type":"image/png", "data": imgbase64 }
         },
         {"type":"text","text":"What is this"}
         ]
