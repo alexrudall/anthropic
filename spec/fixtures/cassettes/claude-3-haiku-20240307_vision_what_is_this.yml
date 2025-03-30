@@ -26,7 +26,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Wed, 09 Oct 2024 09:18:25 GMT
+      - Wed, 29 Jan 2025 12:43:03 GMT
       Content-Type:
       - application/json
       Transfer-Encoding:
@@ -34,21 +34,31 @@ http_interactions:
       Connection:
       - keep-alive
       Anthropic-Ratelimit-Requests-Limit:
-      - '50'
+      - '4000'
       Anthropic-Ratelimit-Requests-Remaining:
-      - '48'
+      - '3999'
       Anthropic-Ratelimit-Requests-Reset:
-      - '2024-10-09T09:19:07Z'
+      - '2025-01-29T12:43:02Z'
+      Anthropic-Ratelimit-Input-Tokens-Limit:
+      - '400000'
+      Anthropic-Ratelimit-Input-Tokens-Remaining:
+      - '400000'
+      Anthropic-Ratelimit-Input-Tokens-Reset:
+      - '2025-01-29T12:43:03Z'
+      Anthropic-Ratelimit-Output-Tokens-Limit:
+      - '80000'
+      Anthropic-Ratelimit-Output-Tokens-Remaining:
+      - '80000'
+      Anthropic-Ratelimit-Output-Tokens-Reset:
+      - '2025-01-29T12:43:02Z'
       Anthropic-Ratelimit-Tokens-Limit:
-      - '50000'
+      - '480000'
       Anthropic-Ratelimit-Tokens-Remaining:
-      - '49000'
+      - '480000'
       Anthropic-Ratelimit-Tokens-Reset:
-      - '2024-10-09T09:18:26Z'
+      - '2025-01-29T12:43:02Z'
       Request-Id:
-      - req_01BRYAKDQUiFEU4XVddpJwec
-      X-Cloud-Trace-Context:
-      - 30f3cfcfb7e9f92af51cf2262c91ca3c
+      - req_01Yb8RY7P4JQc36enaikh8Ne
       Via:
       - 1.1 google
       Cf-Cache-Status:
@@ -58,12 +68,13 @@ http_interactions:
       Server:
       - cloudflare
       Cf-Ray:
-      - 8cfd487689e8956b-LHR
+      - 90994e3d4b2394b5-LHR
     body:
       encoding: ASCII-8BIT
-      string: '{"id":"msg_01SBxMGoLTAbFDhRM8ciYFM3","type":"message","role":"assistant","model":"claude-3-haiku-20240307","content":[{"type":"text","text":"This
-        image depicts a person, a student or student-like figure, holding a tablet
-        or mobile device. The person appears to be wearing a backpack and is dressed
-        in a red and teal outfit. The background has a warm, yellowish tone"}],"stop_reason":"max_tokens","stop_sequence":null,"usage":{"input_tokens":1572,"output_tokens":50}}'
-  recorded_at: Wed, 09 Oct 2024 09:18:25 GMT
+      string: '{"id":"msg_01SvyK3MDuDsKhusMcUKEvAV","type":"message","role":"assistant","model":"claude-3-haiku-20240307","content":[{"type":"text","text":"This
+        image depicts an illustration of a student or young professional using a tablet
+        or mobile device. The person is shown wearing a backpack and holding the device
+        in front of them, suggesting they are engaging in some kind of educational
+        or work-related activity."}],"stop_reason":"max_tokens","stop_sequence":null,"usage":{"input_tokens":1572,"cache_creation_input_tokens":0,"cache_read_input_tokens":0,"output_tokens":50}}'
+  recorded_at: Wed, 29 Jan 2025 12:43:03 GMT
 recorded_with: VCR 6.1.0

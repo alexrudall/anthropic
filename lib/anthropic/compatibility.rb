@@ -5,5 +5,6 @@ module Ruby
     Error = ::Anthropic::Error
     ConfigurationError = ::Anthropic::ConfigurationError
     Configuration = ::Anthropic::Configuration
+    MiddlewareErrors = ::Anthropic::MiddlewareErrors
   end
 end

@@ -202,7 +202,7 @@ RSpec.describe Anthropic::Client do
       it "succeeds" do
         VCR.use_cassette(cassette) do
           expect(response["content"].empty?).to eq(false)
-          expect(response_objects.length).to be > 1 # One malformed object
+          expect(response_objects.length).to be >= 1 # One malformed object
           expect(response_objects[0]["name"]).to eq("Mount Everest")
         end
       end

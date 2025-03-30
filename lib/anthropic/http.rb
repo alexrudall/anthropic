@@ -7,19 +7,19 @@ module Anthropic
   module HTTP
     include HTTPHeaders
 
-    # Unused?
-    def get(path:)
-      to_json(conn.get(uri(path: path)) do |req|
+    def get(path:, parameters: nil)
+      response = conn.get(uri(path: path), parameters) do |req|
         req.headers = headers
-      end&.body)
+      end
+      response&.body
     end
 
-    # This is currently the workhorse for all API calls.
     # rubocop:disable Metrics/MethodLength
-    def json_post(path:, parameters:)
+    # rubocop:disable Metrics/AbcSize
+    def json_post(path:, parameters: {})
       str_resp = {}
       response = conn.post(uri(path: path)) do |req|
-        if parameters[:stream].is_a?(Proc)
+        if parameters.respond_to?(:key?) && parameters[:stream].is_a?(Proc)
           req.options.on_data = to_json_stream(user_proc: parameters[:stream], response: str_resp,
                                                preprocess: parameters[:preprocess_stream])
           parameters[:stream] = true # Necessary to tell Anthropic to stream.
@@ -33,8 +33,9 @@ module Anthropic
       str_resp.empty? ? response.body : str_resp
     end
     # rubocop:enable Metrics/MethodLength
+    # rubocop:enable Metrics/AbcSize
 
-    # Unused?
+    # Unused - leave in until v1 since someone might be using it.
     def multipart_post(path:, parameters: nil)
       to_json(conn(multipart: true).post(uri(path: path)) do |req|
         req.headers = headers.merge({ "Content-Type" => "multipart/form-data" })
@@ -42,7 +43,7 @@ module Anthropic
       end&.body)
     end
 
-    # Unused?
+    # Unused - leave in until v1 since someone might be using it.
     def delete(path:)
       to_json(conn.delete(uri(path: path)) do |req|
         req.headers = headers
@@ -51,7 +52,7 @@ module Anthropic
 
     private
 
-    # Used only by unused methods?
+    # Used only in unused methods - leave in until v1 since someone might be using it.
     def to_json(string)
       return unless string
 
@@ -63,7 +64,7 @@ module Anthropic
 
     # Given a proc, returns an outer proc that can be used to iterate over a JSON stream of chunks.
     # For each chunk, the inner user_proc is called giving it the JSON object. The JSON object could
-    # be a data object or an error object as described in the OpenAI API documentation.
+    # be a data object or an error object as described in the Anthropic API documentation.
     #
     # @param user_proc [Proc] The inner proc to call for each JSON object in the chunk.
     # @return [Proc] An outer proc that iterates over a raw stream, converting it to JSON.
@@ -147,7 +148,7 @@ module Anthropic
     def log(error)
       logger = Logger.new($stdout)
       logger.formatter = proc do |_severity, _datetime, _progname, msg|
-        "\033[31mAnthropic JSON Error (spotted in ruby-anthropic #{VERSION}): #{msg}\n\033[0m"
+        "\033[31mAnthropic JSON Error (spotted in anthropic #{VERSION}): #{msg}\n\033[0m"
       end
       logger.error(error)
     end

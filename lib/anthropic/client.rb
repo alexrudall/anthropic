@@ -1,3 +1,6 @@
+require_relative "messages/batches"
+require_relative "messages/client"
+
 module Anthropic
   class Client
     include Anthropic::HTTP
@@ -6,10 +9,12 @@ module Anthropic
       access_token
       anthropic_version
       api_version
+      log_errors
       uri_base
       request_timeout
       extra_headers
     ].freeze
+    attr_reader(*CONFIG_KEYS)
 
     def initialize(config = {}, &faraday_middleware)
       CONFIG_KEYS.each do |key|
@@ -30,7 +35,10 @@ module Anthropic
     end
 
     # Anthropic API Parameters as of 2024-05-07:
-    #   @see https://docs.anthropic.com/claude/reference/messages_post
+    # @see https://docs.anthropic.com/claude/reference/messages_post
+    #
+    # When called without parameters, returns a Messages::Batches instance for batch operations.
+    # When called with parameters, creates a single message.
     #
     # @param [Hash] parameters
     # @option parameters [Array] :messages - Required. An array of messages to send to the API. Each
@@ -51,20 +59,44 @@ module Anthropic
     #   arguments: the first will be the text accrued so far, and the second will be the delta
     #   just received in the current chunk.
     #
-    # @returns [Hash] the response from the API (after the streaming is done, if streaming)
-    #   @example:
-    # {
-    #   "id" => "msg_013xVudG9xjSvLGwPKMeVXzG",
-    #   "type" => "message",
-    #   "role" => "assistant",
-    #   "content" => [{"type" => "text", "text" => "The sky has no distinct"}],
-    #   "model" => "claude-2.1",
-    #   "stop_reason" => "max_tokens",
-    #   "stop_sequence" => nil,
-    #   "usage" => {"input_tokens" => 15, "output_tokens" => 5}
-    # }
-    def messages(parameters: {})
-      json_post(path: "/messages", parameters: parameters)
+    # @returns [Hash, Messages::Client] Returns a Hash response from the API when creating a message
+    # with parameters, or a Messages::Client instance when called without parameters
+    # @example Creating a message:
+    #   {
+    #     "id" => "msg_013xVudG9xjSvLGwPKMeVXzG",
+    #     "type" => "message",
+    #     "role" => "assistant",
+    #     "content" => [{"type" => "text", "text" => "The sky has no distinct"}],
+    #     "model" => "claude-2.1",
+    #     "stop_reason" => "max_tokens",
+    #     "stop_sequence" => nil,
+    #     "usage" => {"input_tokens" => 15, "output_tokens" => 5}
+    #   }
+    # @example Accessing batches:
+    #   client.messages.batches.create(requests: [...])
+    #   client.messages.batches.get(id: "batch_123")
+    def messages(**args)
+      return @messages ||= Messages::Client.new(self) unless args && args[:parameters]
+
+      json_post(path: "/messages", parameters: args[:parameters])
+    end
+
+    # Adds Anthropic beta features to API requests. Can be used in two ways:
+    #
+    # 1. Multiple betas in one call with comma-separated string:
+    #    client.beta("feature1,feature2").messages
+    #
+    # 2. Chaining multiple beta calls:
+    #    client.beta("feature1").beta("feature2").messages
+    #
+    # @param version [String] The beta version(s) to enable
+    # @return [Client] A new client instance with the beta header(s)
+    def beta(version)
+      dup.tap do |client|
+        existing_beta = client.extra_headers["anthropic-beta"]
+        combined_beta = [existing_beta, version].compact.join(",")
+        client.add_headers("anthropic-beta" => combined_beta)
+      end
     end
 
     private
