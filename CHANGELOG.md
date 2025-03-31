@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add Batches API! Thanks to [@ignacio-chiazzo](https://github.com/ignacio-chiazzo) for previous work on this.
+- Thanks to [@seuros](https://github.com/seuros) for helpful README notes on Batch usage.
 
 ## [0.3.2] - 2024-10-09
 

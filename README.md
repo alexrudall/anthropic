@@ -149,7 +149,9 @@ response = client.messages(
 ```
 
 ### Batches
-The Batches API can be used to process multiple Messages API requests at once. Once a Message Batch is created, it begins processing immediately. Batches can contain up to 100,000 requests and be up to 256 MB in total size.
+The Batches API can be used to process multiple Messages API requests at once. Once a Message Batch is created, it begins processing a soon as possible.
+
+Batches can contain up to 100,000 requests or 256 MB in total size, whichever limit is reached first.
 
 Create a batch of message requests:
 ```ruby
@@ -197,6 +199,15 @@ List all batches:
 client.messages.batches.list
 ```
 
+#### Notes (as of 31 March 2025)
+
+- If individual batch items have errors, you will not be billed for those specific items.
+- Batches will be listed in the account indefinitely.
+- Results are fetchable only within 29 days after batch creation.
+- When you cancel a batch, any unprocessed items will not be billed.
+- Batches in other workspaces are not accessible with API keys from a different workspace.
+- If a batch item takes more than 24 hours to process, it will expire and not be billed.
+
 Once processing ends, you can fetch the results:
 ```ruby
 results = client.messages.batches.results(id: batch_id)
@@ -204,7 +215,7 @@ results = client.messages.batches.results(id: batch_id)
 
 Results are returned as a .jsonl file, with each line containing the result of a single request. Results may be in any order - use the custom_id field to match results to requests.
 
-#### Vision
+### Vision
 
 Claude 3 family of models comes with vision capabilities that allow Claude to understand and analyze images.
 
@@ -250,14 +261,14 @@ response = client.messages(
 ```
 
 
-#### Additional parameters
+### Additional parameters
 
 You can add other parameters to the parameters hash, like `temperature` and even `top_k` or `top_p`. They will just be passed to the Anthropic server. You
 can read more about the supported parameters [here](https://docs.anthropic.com/claude/reference/messages_post).
 
 There are two special parameters, though, to do with... streaming. Keep reading to find out more.
 
-#### JSON
+### JSON
 
 If you want your output to be json, it is recommended to provide an additional message like this:
 
