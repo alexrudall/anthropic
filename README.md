@@ -1,8 +1,8 @@
 # Anthropic
 
-[![Gem Version](https://badge.fury.io/rb/anthropic.svg)](https://badge.fury.io/rb/anthropic)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/alexrudall/anthropic/blob/main/LICENSE.txt)
-[![CircleCI Build Status](https://circleci.com/gh/alexrudall/anthropic.svg?style=shield)](https://circleci.com/gh/alexrudall/anthropic)
+[![Gem Version](https://badge.fury.io/rb/ruby-anthropic.svg)](https://badge.fury.io/rb/ruby-anthropic)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/alexrudall/ruby-anthropic/blob/main/LICENSE.txt)
+[![CircleCI Build Status](https://circleci.com/gh/alexrudall/ruby-anthropic.svg?style=shield)](https://circleci.com/gh/alexrudall/ruby-anthropic)
 
 > [!IMPORTANT]
 > This gem has been renamed from `anthropic` to `ruby-anthropic`, to make way for the new [official Anthropic Ruby SDK](https://github.com/anthropics/anthropic-sdk-ruby) 🎉
@@ -402,7 +402,7 @@ Then update the version number in `version.rb`, update `CHANGELOG.md`, run `bund
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at <https://github.com/alexrudall/anthropic>. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/alexrudall/anthropic/blob/main/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at <https://github.com/alexrudall/ruby-anthropic>. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/alexrudall/ruby-anthropic/blob/main/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -410,4 +410,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Ruby Anthropic project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/alexrudall/anthropic/blob/main/CODE_OF_CONDUCT.md).
+Everyone interacting in the Ruby Anthropic project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/alexrudall/ruby-anthropic/blob/main/CODE_OF_CONDUCT.md).

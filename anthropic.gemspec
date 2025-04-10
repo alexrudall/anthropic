@@ -1,19 +1,19 @@
 require_relative "lib/anthropic/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "anthropic"
+  spec.name          = "ruby-anthropic"
   spec.version       = Anthropic::VERSION
   spec.authors       = ["Alex"]
   spec.email         = ["alexrudall@users.noreply.github.com"]
 
   spec.summary       = "Anthropic API + Ruby! 🤖🌌"
-  spec.homepage      = "https://github.com/alexrudall/anthropic"
+  spec.homepage      = "https://github.com/alexrudall/ruby-anthropic"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.6.0")
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/alexrudall/anthropic"
-  spec.metadata["changelog_uri"] = "https://github.com/alexrudall/anthropic/blob/main/CHANGELOG.md"
+  spec.metadata["source_code_uri"] = "https://github.com/alexrudall/ruby-anthropic"
+  spec.metadata["changelog_uri"] = "https://github.com/alexrudall/ruby-anthropic/blob/main/CHANGELOG.md"
   spec.metadata["rubygems_mfa_required"] = "true"
 
   # Specify which files should be added to the gem when it is released.
