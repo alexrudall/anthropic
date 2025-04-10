@@ -4,6 +4,10 @@
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/alexrudall/anthropic/blob/main/LICENSE.txt)
 [![CircleCI Build Status](https://circleci.com/gh/alexrudall/anthropic.svg?style=shield)](https://circleci.com/gh/alexrudall/anthropic)
 
+> [!IMPORTANT]
+> This gem has been renamed from `anthropic` to `ruby-anthropic`, to make way for the new [official Anthropic Ruby SDK](https://github.com/anthropics/anthropic-sdk-ruby) 🎉
+> If you wish to keep using this gem, you just need to update your Gemfile from `anthropic` to `ruby-anthropic` and version `0.4.2` or greater. No other changes are needed and it will continue to work as normal.
+
 Use the [Anthropic API](https://docs.anthropic.com/claude/reference/getting-started-with-the-api) with Ruby! 🤖🌌
 
 You can get access to the API [here](https://docs.anthropic.com/claude/docs/getting-access-to-claude).
