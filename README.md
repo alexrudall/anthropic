@@ -19,7 +19,7 @@ You can get access to the API [here](https://docs.anthropic.com/claude/docs/gett
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "anthropic"
+gem "ruby-anthropic"
 ```
 
 And then execute:
