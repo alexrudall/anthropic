@@ -53,7 +53,7 @@ module Anthropic
     def access_token
       return @access_token if @access_token
 
-      error_text = "Anthropic access token missing! See https://github.com/alexrudall/anthropic#usage"
+      error_text = "Anthropic access token missing! See https://github.com/alexrudall/ruby-anthropic#usage"
       raise ConfigurationError, error_text
     end
   end
