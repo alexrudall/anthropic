@@ -6,7 +6,7 @@
 
 > [!IMPORTANT]
 > This gem has been renamed from `anthropic` to `ruby-anthropic`, to make way for the new [official Anthropic Ruby SDK](https://github.com/anthropics/anthropic-sdk-ruby) 🎉
-> If you wish to keep using this gem, you just need to update your Gemfile from `anthropic` to `ruby-anthropic`. No other changes are needed and it will continue to work as normal.
+> If you wish to keep using this gem, you just need to update your Gemfile from `anthropic` to `ruby-anthropic` and version `0.4.2` or greater. No other changes are needed and it will continue to work as normal.
 
 Use the [Anthropic API](https://docs.anthropic.com/claude/reference/getting-started-with-the-api) with Ruby! 🤖🌌
 
