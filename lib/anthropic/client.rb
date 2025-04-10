@@ -26,6 +26,7 @@ module Anthropic
         )
       end
       @faraday_middleware = faraday_middleware
+      require 'byebug'; byebug
       log "[WARNING] Gem `anthropic` was renamed to `ruby-anthropic`. Please update your Gemfile!"
     end
 
