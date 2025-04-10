@@ -369,6 +369,8 @@ client.messages(
 )
 ```
 
+test CI
+
 Each time a `}` is reached in the stream, the preprocessor will take what it has in the preprocessing stack, pick out whatever's between the widest `{` and `}`, and try to parse it into a JSON object.
 If it succeeds, it will pass you the json object, reset its preprocessing stack, and carry on.
 
