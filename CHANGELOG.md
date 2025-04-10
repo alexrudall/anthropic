@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2025-04-10
+
+### Changed
+
+- Add deprecation warning - this gem will be renamed to ruby-anthropic in the next release, to make way for the new official Anthropic SDK (currently at https://github.com/anthropics/anthropic-sdk-ruby).
+- The gem name 'anthropic' will soon refer to the official Anthropic SDK. You'll need to update your Gemfile to 'ruby-anthropic' if you want to keep using this gem.
+
 ## [0.4.0] - 2025-03-25
 
 ### Added
