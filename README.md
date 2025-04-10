@@ -1,4 +1,4 @@
-# Anthropic
+# Ruby Anthropic
 
 [![Gem Version](https://badge.fury.io/rb/ruby-anthropic.svg)](https://badge.fury.io/rb/ruby-anthropic)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/alexrudall/ruby-anthropic/blob/main/LICENSE.txt)
