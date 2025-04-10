@@ -148,7 +148,7 @@ module Anthropic
     def log(error)
       logger = Logger.new($stdout)
       logger.formatter = proc do |_severity, _datetime, _progname, msg|
-        "\033[31mAnthropic JSON Error (spotted in anthropic #{VERSION}): #{msg}\n\033[0m"
+        "\033[31mAnthropic Error (spotted in anthropic #{VERSION}): #{msg}\n\033[0m"
       end
       logger.error(error)
     end

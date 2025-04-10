@@ -26,7 +26,7 @@ module Anthropic
         )
       end
       @faraday_middleware = faraday_middleware
-      warn "[DEPRECATION] The gem `anthropic` is now `ruby-anthropic` - please update your Gemfile!"
+      log "[WARNING] Gem `anthropic` was renamed to `ruby-anthropic`. Please update your Gemfile!"
     end
 
     # @deprecated (but still works while Anthropic API responds to it)
