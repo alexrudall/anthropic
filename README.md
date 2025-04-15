@@ -1,8 +1,12 @@
-# Anthropic
+# Ruby Anthropic
 
-[![Gem Version](https://badge.fury.io/rb/anthropic.svg)](https://badge.fury.io/rb/anthropic)
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/alexrudall/anthropic/blob/main/LICENSE.txt)
-[![CircleCI Build Status](https://circleci.com/gh/alexrudall/anthropic.svg?style=shield)](https://circleci.com/gh/alexrudall/anthropic)
+[![Gem Version](https://badge.fury.io/rb/ruby-anthropic.svg)](https://badge.fury.io/rb/ruby-anthropic)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/alexrudall/ruby-anthropic/blob/main/LICENSE.txt)
+[![CircleCI Build Status](https://circleci.com/gh/alexrudall/ruby-anthropic.svg?style=shield)](https://circleci.com/gh/alexrudall/ruby-anthropic)
+
+> [!IMPORTANT]
+> This gem has been renamed from `anthropic` to `ruby-anthropic`, to make way for the new [official Anthropic Ruby SDK](https://github.com/anthropics/anthropic-sdk-ruby) 🎉
+> If you wish to keep using this gem, you just need to update your Gemfile from `anthropic` to `ruby-anthropic` and version `0.4.2` or greater. No other changes are needed and it will continue to work as normal.
 
 Use the [Anthropic API](https://docs.anthropic.com/claude/reference/getting-started-with-the-api) with Ruby! 🤖🌌
 
@@ -15,7 +19,7 @@ You can get access to the API [here](https://docs.anthropic.com/claude/docs/gett
 Add this line to your application's Gemfile:
 
 ```ruby
-gem "anthropic"
+gem "ruby-anthropic"
 ```
 
 And then execute:
@@ -43,7 +47,10 @@ require "anthropic"
 For a quick test you can pass your token directly to a new client:
 
 ```ruby
-client = Anthropic::Client.new(access_token: "access_token_goes_here")
+client = Anthropic::Client.new(
+  access_token: "access_token_goes_here",
+  log_errors: true # Highly recommended in development, so you can see what errors Anthropic is returning. Not recommended in production because it could leak private data to your logs.
+)
 ```
 
 ### With Config
@@ -53,10 +60,11 @@ For a more robust setup, you can configure the gem with your API keys, for examp
 ```ruby
 Anthropic.configure do |config|
   # With dotenv
-  config.access_token = ENV.fetch("ANTHROPIC_API_KEY")
+  config.access_token = ENV.fetch("ANTHROPIC_API_KEY"),
   # OR
   # With Rails credentials
-  config.access_token = Rails.application.credentials.dig(:anthropic, :api_key)
+  config.access_token = Rails.application.credentials.dig(:anthropic, :api_key),
+  config.log_errors = true # Highly recommended in development, so you can see what errors Anthropic is returning. Not recommended in production because it could leak private data to your logs.
 end
 ```
 
@@ -75,6 +83,7 @@ The default timeout for any request using this library is 120 seconds. You can c
 ```ruby
 client = Anthropic::Client.new(
   access_token: "access_token_goes_here",
+  log_errors: true, # Optional
   anthropic_version: "2023-01-01", # Optional
   request_timeout: 240 # Optional
 )
@@ -88,6 +97,16 @@ Anthropic.configure do |config|
   config.anthropic_version = "2023-01-01" # Optional
   config.request_timeout = 240 # Optional
 end
+```
+
+#### Logging
+
+##### Errors
+By default, the `anthropic` gem does not log any `Faraday::Error`s encountered while executing a network request to avoid leaking data (e.g. 400s, 500s, SSL errors and more - see [here](https://www.rubydoc.info/github/lostisland/faraday/Faraday/Error) for a complete list of subclasses of `Faraday::Error` and what can cause them).
+
+If you would like to enable this functionality, you can set `log_errors` to `true` when configuring the client:
+```ruby
+client = Anthropic::Client.new(log_errors: true)
 ```
 
 ### Models
@@ -133,7 +152,74 @@ response = client.messages(
 # => }
 ```
 
-#### Vision
+### Batches
+The Batches API can be used to process multiple Messages API requests at once. Once a Message Batch is created, it begins processing a soon as possible.
+
+Batches can contain up to 100,000 requests or 256 MB in total size, whichever limit is reached first.
+
+Create a batch of message requests:
+```ruby
+response = client.messages.batches.create(
+  parameters: {
+    requests: [
+      {
+        custom_id: "my-first-request",
+        params: {
+          model: "claude-3-haiku-20240307",
+          max_tokens: 1024,
+          messages: [
+            { role: "user", content: "Hello, world" }
+          ]
+        }
+      },
+      {
+        custom_id: "my-second-request",
+        params: {
+          model: "claude-3-haiku-20240307",
+          max_tokens: 1024,
+          messages: [
+            { role: "user", content: "Hi again, friend" }
+          ]
+        }
+      }
+    ]
+  }
+)
+batch_id = response["id"]
+```
+
+You can retrieve information about a specific batch:
+```ruby
+batch = client.messages.batches.get(id: batch_id)
+```
+
+To cancel a batch that is in progress:
+```ruby
+client.messages.batches.cancel(id: batch_id)
+```
+
+List all batches:
+```ruby
+client.messages.batches.list
+```
+
+#### Notes (as of 31 March 2025)
+
+- If individual batch items have errors, you will not be billed for those specific items.
+- Batches will be listed in the account indefinitely.
+- Results are fetchable only within 29 days after batch creation.
+- When you cancel a batch, any unprocessed items will not be billed.
+- Batches in other workspaces are not accessible with API keys from a different workspace.
+- If a batch item takes more than 24 hours to process, it will expire and not be billed.
+
+Once processing ends, you can fetch the results:
+```ruby
+results = client.messages.batches.results(id: batch_id)
+```
+
+Results are returned as a .jsonl file, with each line containing the result of a single request. Results may be in any order - use the custom_id field to match results to requests.
+
+### Vision
 
 Claude 3 family of models comes with vision capabilities that allow Claude to understand and analyze images.
 
@@ -179,14 +265,14 @@ response = client.messages(
 ```
 
 
-#### Additional parameters
+### Additional parameters
 
 You can add other parameters to the parameters hash, like `temperature` and even `top_k` or `top_p`. They will just be passed to the Anthropic server. You
 can read more about the supported parameters [here](https://docs.anthropic.com/claude/reference/messages_post).
 
 There are two special parameters, though, to do with... streaming. Keep reading to find out more.
 
-#### JSON
+### JSON
 
 If you want your output to be json, it is recommended to provide an additional message like this:
 
@@ -316,7 +402,7 @@ Then update the version number in `version.rb`, update `CHANGELOG.md`, run `bund
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at <https://github.com/alexrudall/anthropic>. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/alexrudall/anthropic/blob/main/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at <https://github.com/alexrudall/ruby-anthropic>. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/alexrudall/ruby-anthropic/blob/main/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -324,4 +410,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Ruby Anthropic project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/alexrudall/anthropic/blob/main/CODE_OF_CONDUCT.md).
+Everyone interacting in the Ruby Anthropic project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/alexrudall/ruby-anthropic/blob/main/CODE_OF_CONDUCT.md).
