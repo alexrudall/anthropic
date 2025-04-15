@@ -96,7 +96,7 @@ module Anthropic
       case type
       when "message_start"
         response.merge!(parsed_data["message"])
-        response["content"] = [{ "type" => "text", "text" => "" }]
+        response["content"] = [{ "type" => "text", "text" => +"" }]
       when "message_delta"
         response["usage"].merge!(parsed_data["usage"])
         response.merge!(parsed_data["delta"])
