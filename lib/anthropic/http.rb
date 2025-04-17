@@ -136,13 +136,16 @@ module Anthropic
     def preprocess_json(stack, _delta, user_proc)
       if stack.strip.include?("}")
         matches = stack.match(/\{(?:[^{}]|\g<0>)*\}/)
-        user_proc.call(JSON.parse(matches[0]))
-        stack.clear
+        if matches
+          json_object = JSON.parse(matches[0])
+          user_proc.call(json_object)
+          # Remove the matched JSON object and any preceding/trailing brackets
+          # or commas so that the next JSON object can be matched.
+          stack.sub!(/^\[?,?\s*#{Regexp.escape(matches[0])},?\s*/, "")
+        end
       end
     rescue StandardError => e
       log(e)
-    ensure
-      stack.clear if stack.strip.include?("}")
     end
 
     def log(error)

@@ -130,7 +130,7 @@ RSpec.describe Anthropic::Client do
       end
     end
 
-    context "streaming preprocessed JSON" do
+    context "preprocessing small JSON array" do
       let(:model) { "claude-3-haiku-20240307" }
       let(:messages) do
         [{ role: "user", content: "Give me the height of the 3 tallest mountains. #{json_prompt}" },
@@ -165,6 +165,275 @@ RSpec.describe Anthropic::Client do
           expect(response["content"].empty?).to eq(false)
           expect(response_objects.length > 1).to eq(true)
           expect(response_objects[0]["name"]).to eq("Mount Everest")
+        end
+      end
+    end
+
+    context "preprocessing large JSON array" do
+      let(:model) { "claude-3-haiku-20240307" }
+      let(:messages) do
+        [
+          {
+            role: "user",
+            content: <<~TXT.strip
+              Give me 10 cool, large tweets about Ruby. Follow this format:
+
+              [
+                {
+                  "title": "put tweet title here",
+                  "tweet": "put tweet text here"
+                }
+              ]
+
+              CRITICAL: Ensure JSON is valid. Escape all necessary characters.
+              Don't output anything else, only JSON.
+            TXT
+          },
+          {
+            role: "assistant",
+            content: ""
+          }
+        ]
+      end
+      let(:max_tokens) { 4096 }
+      let(:response_objects) { [] }
+
+      let(:stream) do
+        proc do |json_object|
+          response_objects << json_object
+        end
+      end
+
+      let(:response) do
+        Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)).messages(
+          parameters: {
+            model: model,
+            messages: messages,
+            max_tokens: max_tokens,
+            stream: stream,
+            preprocess_stream: :json
+          }
+        )
+      end
+
+      let(:cassette) { "#{model} streaming json #{messages[0][:content]}".downcase }
+
+      it "succeeds" do
+        VCR.use_cassette(cassette) do
+          expect(response["content"].empty?).to eq(false)
+          expect(response_objects.count).to eq(10)
+          expect(response_objects).to eq(fixture_json("preprocessed_long_json.json"))
+        end
+      end
+    end
+
+    context "preprocessing empty JSON array" do
+      let(:model) { "claude-3-haiku-20240307" }
+      let(:messages) do
+        [
+          {
+            role: "user",
+            content: <<~TXT.strip
+              Return this empty JSON array:
+
+              []
+
+              CRITICAL: Don't output anything else, only this empty JSON array.
+            TXT
+          },
+          {
+            role: "assistant",
+            content: ""
+          }
+        ]
+      end
+      let(:max_tokens) { 4096 }
+      let(:response_objects) { [] }
+
+      let(:stream) do
+        proc do |json_object|
+          response_objects << json_object
+        end
+      end
+
+      let(:response) do
+        Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)).messages(
+          parameters: {
+            model: model,
+            messages: messages,
+            max_tokens: max_tokens,
+            stream: stream,
+            preprocess_stream: :json
+          }
+        )
+      end
+
+      let(:cassette) { "#{model} streaming json #{messages[0][:content]}".downcase }
+
+      it "succeeds" do
+        VCR.use_cassette(cassette) do
+          expect(response["content"].empty?).to eq(false)
+          expect(response_objects.count).to be(0)
+          expect(response_objects).to eq([])
+        end
+      end
+    end
+
+    context "preprocessing single small JSON object" do
+      let(:model) { "claude-3-haiku-20240307" }
+      let(:messages) do
+        [
+          {
+            role: "user",
+            content: <<~TXT.strip
+              Return this JSON object exactly as it is:
+
+              {"name": "Mountain Name", "height": "height in km"}
+
+              CRITICAL: Don't output anything else, only this JSON object.
+            TXT
+          },
+          {
+            role: "assistant",
+            content: ""
+          }
+        ]
+      end
+      let(:max_tokens) { 4096 }
+      let(:response_objects) { [] }
+
+      let(:stream) do
+        proc do |json_object|
+          response_objects << json_object
+        end
+      end
+
+      let(:response) do
+        Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)).messages(
+          parameters: {
+            model: model,
+            messages: messages,
+            max_tokens: max_tokens,
+            stream: stream,
+            preprocess_stream: :json
+          }
+        )
+      end
+
+      let(:cassette) { "#{model} streaming json #{messages[0][:content]}".downcase }
+
+      it "succeeds" do
+        VCR.use_cassette(cassette) do
+          expect(response["content"].empty?).to eq(false)
+          expect(response_objects.count).to be(1)
+          expect(response_objects)
+            .to eq([{ "name" => "Mountain Name", "height" => "height in km" }])
+        end
+      end
+    end
+
+    context "preprocessing single large JSON object" do
+      let(:model) { "claude-3-haiku-20240307" }
+      let(:messages) do
+        [
+          {
+            role: "user",
+            content: <<~TXT.strip
+              Return a single JSON object with a large text in the "text" field.
+              The text should be at least 1000 characters long.
+
+              {"text": "large text"}
+
+              CRITICAL: Don't output anything else, only this JSON object.
+            TXT
+          },
+          {
+            role: "assistant",
+            content: ""
+          }
+        ]
+      end
+      let(:max_tokens) { 4096 }
+      let(:response_objects) { [] }
+
+      let(:stream) do
+        proc do |json_object|
+          response_objects << json_object
+        end
+      end
+
+      let(:response) do
+        Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)).messages(
+          parameters: {
+            model: model,
+            messages: messages,
+            max_tokens: max_tokens,
+            stream: stream,
+            preprocess_stream: :json
+          }
+        )
+      end
+
+      let(:cassette) { "#{model} streaming json #{messages[0][:content]}".downcase }
+
+      it "succeeds" do
+        VCR.use_cassette(cassette) do
+          expect(response["content"].empty?).to eq(false)
+          expect(response_objects.count).to be(1)
+          expect(response_objects)
+            .to eq(fixture_json("preprocessed_single_long_json.json"))
+        end
+      end
+    end
+
+    context "preprocessing single empty JSON object" do
+      let(:model) { "claude-3-haiku-20240307" }
+      let(:messages) do
+        [
+          {
+            role: "user",
+            content: <<~TXT.strip
+              Return this JSON object exactly as it is:
+
+              {}
+
+              CRITICAL: Don't output anything else, only this JSON object.
+            TXT
+          },
+          {
+            role: "assistant",
+            content: ""
+          }
+        ]
+      end
+      let(:max_tokens) { 4096 }
+      let(:response_objects) { [] }
+
+      let(:stream) do
+        proc do |json_object|
+          response_objects << json_object
+        end
+      end
+
+      let(:response) do
+        Anthropic::Client.new(access_token: ENV.fetch("ANTHROPIC_API_KEY", nil)).messages(
+          parameters: {
+            model: model,
+            messages: messages,
+            max_tokens: max_tokens,
+            stream: stream,
+            preprocess_stream: :json
+          }
+        )
+      end
+
+      let(:cassette) { "#{model} streaming json #{messages[0][:content]}".downcase }
+
+      it "succeeds" do
+        VCR.use_cassette(cassette) do
+          expect(response["content"].empty?).to eq(false)
+          expect(response_objects.count).to be(1)
+          expect(response_objects).to eq([{}])
         end
       end
     end
